@@ -1,0 +1,296 @@
+{
+  "name": "Google Forms - T-shirt",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4",
+          "mode": "list",
+          "cachedResultName": "T-Shirt Respuestas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 843863878,
+          "mode": "list",
+          "cachedResultName": "Respuestas de formulario 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit#gid=843863878"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "c7cb6a54-eeb8-4fa2-a9b9-37dec69de549",
+      "name": "Obetener solicitudes de camisetas",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BXKR3SMJIs98W59u",
+          "name": "Google Sheets - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "35a4271a-bd4d-447c-979f-adcbe5ccdcf5",
+      "name": "Ejecución Manual"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a85a1e5b-8851-4619-a9e7-d1451a5ac184",
+              "leftValue": "={{ $json['Dirección de correo electrónico'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        0
+      ],
+      "id": "5d9e8a8a-5b72-4b68-85ed-9d2214a6b265",
+      "name": "Filtro de solicitudes incompletas"
+    },
+    {
+      "parameters": {
+        "content": "## Google Sheet\n**Leer y filtrar** solicitudes ",
+        "height": 272,
+        "width": 608
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        128,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "a27f04d7-8a3e-468e-86f5-cbe12a15bc5d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        592,
+        0
+      ],
+      "id": "b18f94f0-8440-4be8-9eeb-11a761773969",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1THQO8yzuUwWPDzHcuWa7CWB5x63AOyDx2sdqm4ZjzgI",
+          "mode": "list",
+          "cachedResultName": "T-Shirt Inventario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1THQO8yzuUwWPDzHcuWa7CWB5x63AOyDx2sdqm4ZjzgI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1THQO8yzuUwWPDzHcuWa7CWB5x63AOyDx2sdqm4ZjzgI/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        0
+      ],
+      "id": "fe3bf7ed-dc28-4801-9e9b-034cad0848fc",
+      "name": "Obtener inventario",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BXKR3SMJIs98W59u",
+          "name": "Google Sheets - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Google Sheet\n**Recuperar** stock del inventario\n ",
+        "height": 272,
+        "width": 592,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        784,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "5e2878cc-0d96-46c0-8481-e2cc5139c24c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        0
+      ],
+      "id": "b02b8b6f-7518-4c3d-aef0-174859983bc4",
+      "name": "Agrupar stock"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().filter((item) => !!item.json['Dirección de correo electrónico'])"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        -336
+      ],
+      "id": "abf436df-aeca-4588-a4f9-81c40e3360c0",
+      "name": "Code filtrar los registros sin email"
+    }
+  ],
+  "pinData": {
+    "Obetener solicitudes de camisetas": [
+      {
+        "json": {
+          "row_number": 2,
+          "Marca temporal": "23/09/2025 13:23:22",
+          "Nombre": "Nikolas",
+          "Talla de camiseta": "M",
+          "Otros comentarios": "Sin comentarios",
+          "Dirección de correo electrónico": "nikolas090189@gmail.com",
+          "Verificado": "",
+          "Fecha de verificación": ""
+        }
+      },
+      {
+        "json": {
+          "row_number": 3,
+          "Marca temporal": "23/09/2025 13:23:22",
+          "Nombre": "Carlos",
+          "Talla de camiseta": "M",
+          "Otros comentarios": "",
+          "Dirección de correo electrónico": "",
+          "Verificado": "",
+          "Fecha de verificación": ""
+        }
+      },
+      {
+        "json": {
+          "row_number": 4,
+          "Marca temporal": "23/09/2025 13:23:22",
+          "Nombre": "Juan",
+          "Talla de camiseta": "XS",
+          "Otros comentarios": "Sin comentarios",
+          "Dirección de correo electrónico": "juan@gmail.com",
+          "Verificado": "",
+          "Fecha de verificación": ""
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Obetener solicitudes de camisetas": {
+      "main": [
+        [
+          {
+            "node": "Filtro de solicitudes incompletas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ejecución Manual": {
+      "main": [
+        [
+          {
+            "node": "Obetener solicitudes de camisetas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro de solicitudes incompletas": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Obtener inventario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener inventario": {
+      "main": [
+        [
+          {
+            "node": "Agrupar stock",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a697ecd6-5e8b-436c-8574-988231992559",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
+  },
+  "id": "Qd0sOrS1WA0RSCrs",
+  "tags": []
+}
