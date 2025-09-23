@@ -1,4 +1,5 @@
 {
+  "name": "pokemon",
   "nodes": [
     {
       "parameters": {},
@@ -15,17 +16,17 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "1pLKMJdXI6pKzrxB6kKkxu5_-EkXyZvYgWUbAFC-Bnpo",
+          "value": "1LLQlcwGvzuR-I-N2vj7wBDRITdpeIHIF7kOYIZAxAag",
           "mode": "list",
           "cachedResultName": "Pokemon tabla de información",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pLKMJdXI6pKzrxB6kKkxu5_-EkXyZvYgWUbAFC-Bnpo/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LLQlcwGvzuR-I-N2vj7wBDRITdpeIHIF7kOYIZAxAag/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Pokemons-ID-Sheet",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pLKMJdXI6pKzrxB6kKkxu5_-EkXyZvYgWUbAFC-Bnpo/edit#gid=0"
+          "cachedResultName": "Pokemon-ID-Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LLQlcwGvzuR-I-N2vj7wBDRITdpeIHIF7kOYIZAxAag/edit#gid=0"
         },
         "options": {}
       },
@@ -36,11 +37,17 @@
         -48
       ],
       "id": "bd3e0e63-ed3f-4044-8999-34c542fcac70",
-      "name": "Obtener ids de Pokemons"
+      "name": "Obtener ids de Pokemons",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BXKR3SMJIs98W59u",
+          "name": "Google Sheets - nikolas090189@gmail.com"
+        }
+      }
     },
     {
       "parameters": {
-        "url": "= https://pokeapi.co/api/v2/pokemon/{{ $json.ID }}",
+        "url": "=https://pokeapi.co/api/v2/pokemon/{{ $json.ID }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -104,17 +111,17 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1pLKMJdXI6pKzrxB6kKkxu5_-EkXyZvYgWUbAFC-Bnpo",
+          "value": "1LLQlcwGvzuR-I-N2vj7wBDRITdpeIHIF7kOYIZAxAag",
           "mode": "list",
           "cachedResultName": "Pokemon tabla de información",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pLKMJdXI6pKzrxB6kKkxu5_-EkXyZvYgWUbAFC-Bnpo/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LLQlcwGvzuR-I-N2vj7wBDRITdpeIHIF7kOYIZAxAag/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Pokemons-ID-Sheet",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pLKMJdXI6pKzrxB6kKkxu5_-EkXyZvYgWUbAFC-Bnpo/edit#gid=0"
+          "cachedResultName": "Pokemon-ID-Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LLQlcwGvzuR-I-N2vj7wBDRITdpeIHIF7kOYIZAxAag/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -199,7 +206,13 @@
         -48
       ],
       "id": "b0b04d49-3c7a-4b78-bed7-66ba17a1706e",
-      "name": "Actualizar información de Pokemons"
+      "name": "Actualizar información de Pokemons",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BXKR3SMJIs98W59u",
+          "name": "Google Sheets - nikolas090189@gmail.com"
+        }
+      }
     },
     {
       "parameters": {
@@ -310,7 +323,7 @@
     },
     {
       "parameters": {
-        "sendTo": "fernando.devtalles@gmail.com",
+        "sendTo": "nikolas090189@gmail.com",
         "subject": "El proceso de migración terminó",
         "message": "=<h1>Proceso terminó </h1> <h2>Nuevos Pokémons ( {{ $json.ID.length }} ) </h2> {{ $json.ID }} <br/> {{ $json.Nombre }} ",
         "options": {}
@@ -323,7 +336,13 @@
       ],
       "id": "e1fb353e-0069-4518-8777-a73066d65fd6",
       "name": "Enviar correo de resultado del proceso",
-      "webhookId": "051d212b-7134-4612-b2ae-4bbbde23a7d8"
+      "webhookId": "051d212b-7134-4612-b2ae-4bbbde23a7d8",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jG503Egv0gBIaG41",
+          "name": "Gmail account - nikolas090189@gmail.com"
+        }
+      }
     },
     {
       "parameters": {
@@ -380,6 +399,7 @@
       "name": "Sticky Note5"
     }
   ],
+  "pinData": {},
   "connections": {
     "Click": {
       "main": [
@@ -425,22 +445,22 @@
         ]
       ]
     },
-    "Actualizar información de Pokemons": {
+    "Filtrar pokemons a buscar": {
       "main": [
         [
           {
-            "node": "Agrupar resultados",
+            "node": "Obtener información pokemon",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Filtrar pokemons a buscar": {
+    "Actualizar información de Pokemons": {
       "main": [
         [
           {
-            "node": "Obtener información pokemon",
+            "node": "Agrupar resultados",
             "type": "main",
             "index": 0
           }
@@ -459,8 +479,15 @@
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e190ad73-957d-4bdf-ba1f-b1cce714cfb0",
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
-  }
+  },
+  "id": "BTmA5YsASppjBnG3",
+  "tags": []
 }
