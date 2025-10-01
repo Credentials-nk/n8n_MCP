@@ -1,0 +1,548 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a85a1e5b-8851-4619-a9e7-d1451a5ac184",
+              "leftValue": "={{ $json['Dirección de correo electrónico'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f59b06b5-0e42-452b-a491-384e7038a8a3",
+              "leftValue": "={{ $json['Fecha de verificación'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "0eea1412-efa4-4dcb-9315-5ecab4620cb3",
+              "leftValue": "={{ $json.Verificado.toString() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        224
+      ],
+      "id": "c6a34f7c-24a8-4ba6-9b74-1acc539dcb73",
+      "name": "Filtro de solicitudes incompletas"
+    },
+    {
+      "parameters": {
+        "content": "## Google Sheet\n**Leer y filtrar** solicitudes ",
+        "height": 272,
+        "width": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -240,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "07523a0b-f397-4038-92fb-b18d395a9899",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "sendTo": "nikolas090189@gmail.com",
+        "subject": "Actualización del inventario de camisetas",
+        "message": "=<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Resumen de actualización de inventario</title>\n    <style>\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;\n            background-color: #f4f4f4;\n            margin: 0;\n            padding: 20px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n        }\n        .card {\n            background-color: #ffffff;\n            border-radius: 8px;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n            padding: 30px;\n            max-width: 700px;\n            width: 100%;\n            box-sizing: border-box;\n            text-align: center;\n        }\n        .header {\n            color: #333333;\n            font-size: 24px;\n            font-weight: bold;\n            margin-bottom: 20px;\n        }\n        .date {\n            color: #777777;\n            font-size: 14px;\n            margin-bottom: 20px;\n        }\n        .content {\n            text-align: left;\n            line-height: 1.6;\n            color: #555555;\n            margin-bottom: 25px;\n        }\n        .summary-table {\n            width: 100%;\n            border-collapse: collapse;\n            margin-bottom: 25px;\n            border-radius: 8px;\n            overflow: hidden;\n        }\n        .summary-table th, .summary-table td {\n            padding: 12px;\n            border-bottom: 1px solid #eeeeee;\n        }\n        .summary-table th {\n            background-color: #f9f9f9;\n            text-align: left;\n            color: #333333;\n            font-weight: bold;\n        }\n        .summary-table td {\n            background-color: #ffffff;\n            text-align: left;\n            color: #666666;\n        }\n        .footer {\n            color: #999999;\n            font-size: 12px;\n            margin-top: 20px;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"card\">\n        <div class=\"header\">\n            Resumen de actualización de inventario\n        </div>\n        <div class=\"date\">\n            Fecha de actualización: {{ $now.format('dd-MM-yyyy') }}\n        </div>\n        <div class=\"content\">\n           <strong>Afectados:</strong> \n{{\n  $('Reducir inventario').item.json.orders\n    .map(item => `${item.Nombre || ''} (${item[\"Dirección de correo electrónico\"] || ''})`)\n    .join(', ')\n}}\n\n            <br><br>\n            Este correo es para informarte que la actualización del inventario ha sido completada con éxito. A continuación, encontrarás el resumen de los cambios:\n            <br><br>\n        </div>\n        <!-- Tabla dinámica de inventario -->\n        <table class=\"summary-table\">\n            <thead>\n                <tr>\n                    <th>Producto</th>\n                    <th>Talla</th>\n                    <th>Cantidad</th>\n                </tr>\n            </thead>\n            <tbody>\n              {{ \n                $('Reducir inventario').item.json.inventory\n                  .map(item => `\n                    <tr>\n                      <td>${item.Producto}</td>\n                      <td>${item.Talla}</td>\n                      <td>${item.Inventario}</td>\n                    </tr>\n                  `).join('')\n              }}\n            </tbody>\n        </table>\n        <div class=\"content\">\n            Para ver más detalles, por favor visita nuestro sistema de gestión de inventario.\n            <br><br>\n            ¡Gracias!  \n            <br>\n            El equipo de RRHH\n        </div>\n        <div class=\"footer\">\n            Este es un correo automático, por favor no respondas a este mensaje.\n        </div>\n    </div>\n</body>\n</html>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2144,
+        240
+      ],
+      "id": "93978c99-9902-408e-ae2a-b636dacbd7e1",
+      "name": "Send a message",
+      "webhookId": "98a081d2-3211-4c03-812b-a13064b718c6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jG503Egv0gBIaG41",
+          "name": "Gmail account - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        240
+      ],
+      "id": "a0824e29-7baf-4a7e-a861-183c3b1d375c",
+      "name": "Agrupar flujos"
+    },
+    {
+      "parameters": {
+        "content": "## Grupa la salida \nEnvia solo un correo con la actualizacion del inventario\n",
+        "height": 320,
+        "width": 368,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1664,
+        112
+      ],
+      "typeVersion": 1,
+      "id": "4aacc2c4-428f-4318-8100-26989cefe27a",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4",
+          "mode": "list",
+          "cachedResultName": "T-Shirt Respuestas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 843863878,
+          "mode": "list",
+          "cachedResultName": "Respuestas de formulario 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit#gid=843863878"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        224
+      ],
+      "id": "9cd8e848-ffc8-4fa2-b5ed-a5acd8c8ddae",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "vOxXw2W7dymwGpeL",
+          "name": "Google Sheets Trigger - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "select * from invertory;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        112,
+        928
+      ],
+      "id": "68707520-cf59-48ab-ac95-834cf9248daa",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "Xc77OJKF47GoFlWI",
+          "name": "Postgres - NeonTech"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        208,
+        128
+      ],
+      "id": "fc843607-746a-4d50-9588-7f8b788d8a26",
+      "name": "Barrer solicitudes"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Fin ciclo",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        256
+      ],
+      "id": "ae5b179c-02c1-403a-9593-6d6b7f2b578d"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "select * from PUBLIC.inventory\nwhere size = '{{ $json['Talla de camiseta'].substring(0,4).replaceAll('-', '') }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        464,
+        144
+      ],
+      "id": "58bcb2b3-49d8-4c1f-8098-c514e3116a63",
+      "name": "Obtener inventario por talla",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "Xc77OJKF47GoFlWI",
+          "name": "Postgres - NeonTech"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3c578590-0dc9-426e-908e-0d9702db0ad4",
+              "leftValue": "={{ $json.in_stock }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "e702388a-1aae-4efe-a96f-68562d869b72",
+              "leftValue": "={{ $json.in_stock }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        144
+      ],
+      "id": "11ae1536-16a5-41a5-b460-3881131fa645",
+      "name": "¿Hay existencias?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8b2b4e1e-bed6-477a-b045-70e26fd04ff4",
+              "name": "in_stock",
+              "value": "={{ ( $json.in_stock - 1 > 0 ) ? $json.in_stock - 1 : 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "6924551d-fa12-4e53-a15a-552acae3dd0b",
+              "name": "size",
+              "value": "={{ $json.size }}",
+              "type": "string"
+            },
+            {
+              "id": "09f08f3b-eb4f-4d3f-a821-994e6fa445f5",
+              "name": "product_name",
+              "value": "={{ $json.product_name }}",
+              "type": "string"
+            },
+            {
+              "id": "ac22a30b-ec7f-4e75-a2b4-657be51cde57",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        912,
+        128
+      ],
+      "id": "b95d86fd-2527-472d-a801-000d08983a5d",
+      "name": "Restar inventario"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "inventory",
+          "mode": "list",
+          "cachedResultName": "inventory"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "in_stock": "={{ $json.in_stock }}",
+            "id": "={{ $json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "product_name",
+              "displayName": "product_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "size",
+              "displayName": "size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "in_stock",
+              "displayName": "in_stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1120,
+        128
+      ],
+      "id": "86de5297-0601-40e1-908d-22b49355a473",
+      "name": "Actualizar inventario",
+      "credentials": {
+        "postgres": {
+          "id": "Xc77OJKF47GoFlWI",
+          "name": "Postgres - NeonTech"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Inventario\nVerificar existencias",
+        "height": 320,
+        "width": 432,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        400,
+        32
+      ],
+      "typeVersion": 1,
+      "id": "af3d18c7-e841-4b91-a9ca-234315b0c435",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Inventario\nReducir existencias",
+        "height": 320,
+        "width": 432,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        880,
+        32
+      ],
+      "typeVersion": 1,
+      "id": "3f0ce456-40df-45ce-86b6-6d272fb3fa85",
+      "name": "Sticky Note2"
+    }
+  ],
+  "connections": {
+    "Filtro de solicitudes incompletas": {
+      "main": [
+        [
+          {
+            "node": "Barrer solicitudes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Agrupar flujos": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filtro de solicitudes incompletas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Barrer solicitudes": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Obtener inventario por talla",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fin ciclo": {
+      "main": [
+        [
+          {
+            "node": "Barrer solicitudes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener inventario por talla": {
+      "main": [
+        [
+          {
+            "node": "¿Hay existencias?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Hay existencias?": {
+      "main": [
+        [
+          {
+            "node": "Restar inventario",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Barrer solicitudes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Restar inventario": {
+      "main": [
+        [
+          {
+            "node": "Actualizar inventario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
+  }
+}
