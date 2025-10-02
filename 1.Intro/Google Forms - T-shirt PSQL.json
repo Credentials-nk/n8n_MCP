@@ -73,7 +73,7 @@
       "parameters": {
         "sendTo": "nikolas090189@gmail.com",
         "subject": "Actualización del inventario de camisetas",
-        "message": "=<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Resumen de actualización de inventario</title>\n    <style>\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;\n            background-color: #f4f4f4;\n            margin: 0;\n            padding: 20px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n        }\n        .card {\n            background-color: #ffffff;\n            border-radius: 8px;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n            padding: 30px;\n            max-width: 700px;\n            width: 100%;\n            box-sizing: border-box;\n            text-align: center;\n        }\n        .header {\n            color: #333333;\n            font-size: 24px;\n            font-weight: bold;\n            margin-bottom: 20px;\n        }\n        .date {\n            color: #777777;\n            font-size: 14px;\n            margin-bottom: 20px;\n        }\n        .content {\n            text-align: left;\n            line-height: 1.6;\n            color: #555555;\n            margin-bottom: 25px;\n        }\n        .summary-table {\n            width: 100%;\n            border-collapse: collapse;\n            margin-bottom: 25px;\n            border-radius: 8px;\n            overflow: hidden;\n        }\n        .summary-table th, .summary-table td {\n            padding: 12px;\n            border-bottom: 1px solid #eeeeee;\n        }\n        .summary-table th {\n            background-color: #f9f9f9;\n            text-align: left;\n            color: #333333;\n            font-weight: bold;\n        }\n        .summary-table td {\n            background-color: #ffffff;\n            text-align: left;\n            color: #666666;\n        }\n        .footer {\n            color: #999999;\n            font-size: 12px;\n            margin-top: 20px;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"card\">\n        <div class=\"header\">\n            Resumen de actualización de inventario\n        </div>\n        <div class=\"date\">\n            Fecha de actualización: {{ $now.format('dd-MM-yyyy') }}\n        </div>\n        <div class=\"content\">\n           <strong>Afectados:</strong> \n{{\n  $('Reducir inventario').item.json.orders\n    .map(item => `${item.Nombre || ''} (${item[\"Dirección de correo electrónico\"] || ''})`)\n    .join(', ')\n}}\n\n            <br><br>\n            Este correo es para informarte que la actualización del inventario ha sido completada con éxito. A continuación, encontrarás el resumen de los cambios:\n            <br><br>\n        </div>\n        <!-- Tabla dinámica de inventario -->\n        <table class=\"summary-table\">\n            <thead>\n                <tr>\n                    <th>Producto</th>\n                    <th>Talla</th>\n                    <th>Cantidad</th>\n                </tr>\n            </thead>\n            <tbody>\n              {{ \n                $('Reducir inventario').item.json.inventory\n                  .map(item => `\n                    <tr>\n                      <td>${item.Producto}</td>\n                      <td>${item.Talla}</td>\n                      <td>${item.Inventario}</td>\n                    </tr>\n                  `).join('')\n              }}\n            </tbody>\n        </table>\n        <div class=\"content\">\n            Para ver más detalles, por favor visita nuestro sistema de gestión de inventario.\n            <br><br>\n            ¡Gracias!  \n            <br>\n            El equipo de RRHH\n        </div>\n        <div class=\"footer\">\n            Este es un correo automático, por favor no respondas a este mensaje.\n        </div>\n    </div>\n</body>\n</html>\n",
+        "message": "=<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Resumen de actualización de inventario</title>\n    <style>\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;\n            background-color: #f4f4f4;\n            margin: 0;\n            padding: 20px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n        }\n        .card {\n            background-color: #ffffff;\n            border-radius: 8px;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n            padding: 30px;\n            max-width: 700px;\n            width: 100%;\n            box-sizing: border-box;\n            text-align: center;\n        }\n        .header {\n            color: #333333;\n            font-size: 24px;\n            font-weight: bold;\n            margin-bottom: 20px;\n        }\n        .date {\n            color: #777777;\n            font-size: 14px;\n            margin-bottom: 20px;\n        }\n        .content {\n            text-align: left;\n            line-height: 1.6;\n            color: #555555;\n            margin-bottom: 25px;\n        }\n        .summary-table {\n            width: 100%;\n            border-collapse: collapse;\n            margin-bottom: 25px;\n            border-radius: 8px;\n            overflow: hidden;\n        }\n        .summary-table th, .summary-table td {\n            padding: 12px;\n            border-bottom: 1px solid #eeeeee;\n        }\n        .summary-table th {\n            background-color: #f9f9f9;\n            text-align: left;\n            color: #333333;\n            font-weight: bold;\n        }\n        .summary-table td {\n            background-color: #ffffff;\n            text-align: left;\n            color: #666666;\n        }\n        .footer {\n            color: #999999;\n            font-size: 12px;\n            margin-top: 20px;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"card\">\n        <div class=\"header\">\n            Resumen de actualización de inventario\n        </div>\n        <div class=\"date\">\n            Fecha de actualización: {{ $now.format('dd-MM-yyyy') }}\n        </div>\n        <div class=\"content\">\n           <strong>Afectados:</strong> \n{{ $json['Dirección de correo electrónico'].join(', ') }}\n\n\n            <br><br>\n            Este correo es para informarte que la actualización del inventario ha sido completada con éxito. A continuación, encontrarás el resumen de los cambios:\n            <br><br>\n        </div>\n\n        <div class=\"content\">\n            Para ver más detalles, por favor visita nuestro sistema de gestión de inventario.\n            <br><br>\n            ¡Gracias!  \n            <br>\n            El equipo de RRHH\n        </div>\n        <div class=\"footer\">\n            Este es un correo automático, por favor no respondas a este mensaje.\n        </div>\n    </div>\n</body>\n</html>\n",
         "options": {
           "appendAttribution": false
         }
@@ -81,8 +81,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        2144,
-        240
+        928,
+        -256
       ],
       "id": "93978c99-9902-408e-ae2a-b636dacbd7e1",
       "name": "Send a message",
@@ -98,7 +98,12 @@
       "parameters": {
         "fieldsToAggregate": {
           "fieldToAggregate": [
-            {}
+            {
+              "fieldToAggregate": "Dirección de correo electrónico"
+            },
+            {
+              "fieldToAggregate": "="
+            }
           ]
         },
         "options": {}
@@ -106,8 +111,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        1792,
-        240
+        480,
+        -256
       ],
       "id": "a0824e29-7baf-4a7e-a861-183c3b1d375c",
       "name": "Agrupar flujos"
@@ -121,53 +126,12 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1664,
-        112
+        352,
+        -384
       ],
       "typeVersion": 1,
       "id": "4aacc2c4-428f-4318-8100-26989cefe27a",
       "name": "Sticky Note4"
-    },
-    {
-      "parameters": {
-        "pollTimes": {
-          "item": [
-            {
-              "mode": "everyMinute"
-            }
-          ]
-        },
-        "documentId": {
-          "__rl": true,
-          "value": "1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4",
-          "mode": "list",
-          "cachedResultName": "T-Shirt Respuestas",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 843863878,
-          "mode": "list",
-          "cachedResultName": "Respuestas de formulario 1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit#gid=843863878"
-        },
-        "event": "rowAdded",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheetsTrigger",
-      "typeVersion": 1,
-      "position": [
-        -496,
-        224
-      ],
-      "id": "9cd8e848-ffc8-4fa2-b5ed-a5acd8c8ddae",
-      "name": "Google Sheets Trigger",
-      "credentials": {
-        "googleSheetsTriggerOAuth2Api": {
-          "id": "vOxXw2W7dymwGpeL",
-          "name": "Google Sheets Trigger - nikolas090189@gmail.com"
-        }
-      }
     },
     {
       "parameters": {
@@ -209,8 +173,8 @@
       "name": "Fin ciclo",
       "typeVersion": 1,
       "position": [
-        1392,
-        256
+        1424,
+        512
       ],
       "id": "ae5b179c-02c1-403a-9593-6d6b7f2b578d"
     },
@@ -435,6 +399,303 @@
       "typeVersion": 1,
       "id": "3f0ce456-40df-45ce-86b6-6d272fb3fa85",
       "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4",
+          "mode": "list",
+          "cachedResultName": "T-Shirt Respuestas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 843863878,
+          "mode": "list",
+          "cachedResultName": "Respuestas de formulario 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit#gid=843863878"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        224
+      ],
+      "id": "9cd8e848-ffc8-4fa2-b5ed-a5acd8c8ddae",
+      "name": "Get - Respuestas",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "vOxXw2W7dymwGpeL",
+          "name": "Google Sheets Trigger - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4",
+          "mode": "list",
+          "cachedResultName": "T-Shirt Respuestas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 843863878,
+          "mode": "list",
+          "cachedResultName": "Respuestas de formulario 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit#gid=843863878"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Dirección de correo electrónico": "={{ $('Barrer solicitudes').item.json['Dirección de correo electrónico'] }}",
+            "Fecha de verificación": "={{ $now.format('yyyy-MM-dd HH:MM') }}",
+            "Verificado": "={{ true }}"
+          },
+          "matchingColumns": [
+            "Dirección de correo electrónico"
+          ],
+          "schema": [
+            {
+              "id": "Marca temporal",
+              "displayName": "Marca temporal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Talla de camiseta",
+              "displayName": "Talla de camiseta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Otros comentarios",
+              "displayName": "Otros comentarios",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dirección de correo electrónico",
+              "displayName": "Dirección de correo electrónico",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Verificado",
+              "displayName": "Verificado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fecha de verificación",
+              "displayName": "Fecha de verificación",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1360,
+        128
+      ],
+      "id": "cf96c0aa-cb05-4b65-820e-7dca14f2cac4",
+      "name": "Actualizar - Verificado y fecha",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BXKR3SMJIs98W59u",
+          "name": "Google Sheets - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4",
+          "mode": "list",
+          "cachedResultName": "T-Shirt Respuestas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 843863878,
+          "mode": "list",
+          "cachedResultName": "Respuestas de formulario 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SZne45NRPz-WknaHnPvUqHdhaIfaLjdn1-vqANPuQH4/edit#gid=843863878"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Dirección de correo electrónico": "={{ $('Barrer solicitudes').item.json['Dirección de correo electrónico'] }}",
+            "Fecha de verificación": "={{ $now.format('yyyy-MM-dd HH:MM') }}",
+            "Verificado": "={{ false }}"
+          },
+          "matchingColumns": [
+            "Dirección de correo electrónico"
+          ],
+          "schema": [
+            {
+              "id": "Marca temporal",
+              "displayName": "Marca temporal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Talla de camiseta",
+              "displayName": "Talla de camiseta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Otros comentarios",
+              "displayName": "Otros comentarios",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dirección de correo electrónico",
+              "displayName": "Dirección de correo electrónico",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Verificado",
+              "displayName": "Verificado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fecha de verificación",
+              "displayName": "Fecha de verificación",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        736,
+        416
+      ],
+      "id": "92769e3f-b178-4a66-b1d8-fadb7e634c18",
+      "name": "Actualizar failed - Verificado y fecha1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BXKR3SMJIs98W59u",
+          "name": "Google Sheets - nikolas090189@gmail.com"
+        }
+      }
     }
   ],
   "connections": {
@@ -465,20 +726,15 @@
         ]
       ]
     },
-    "Google Sheets Trigger": {
+    "Barrer solicitudes": {
       "main": [
         [
           {
-            "node": "Filtro de solicitudes incompletas",
+            "node": "Agrupar flujos",
             "type": "main",
             "index": 0
           }
-        ]
-      ]
-    },
-    "Barrer solicitudes": {
-      "main": [
-        [],
+        ],
         [
           {
             "node": "Obtener inventario por talla",
@@ -521,7 +777,7 @@
         ],
         [
           {
-            "node": "Barrer solicitudes",
+            "node": "Actualizar failed - Verificado y fecha1",
             "type": "main",
             "index": 0
           }
@@ -533,6 +789,50 @@
         [
           {
             "node": "Actualizar inventario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar inventario": {
+      "main": [
+        [
+          {
+            "node": "Actualizar - Verificado y fecha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Respuestas": {
+      "main": [
+        [
+          {
+            "node": "Filtro de solicitudes incompletas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar - Verificado y fecha": {
+      "main": [
+        [
+          {
+            "node": "Fin ciclo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar failed - Verificado y fecha1": {
+      "main": [
+        [
+          {
+            "node": "Barrer solicitudes",
             "type": "main",
             "index": 0
           }
