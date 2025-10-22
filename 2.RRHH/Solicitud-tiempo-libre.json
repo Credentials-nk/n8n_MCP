@@ -74,7 +74,7 @@
       "parameters": {
         "content": "## Validaciones",
         "height": 544,
-        "width": 768,
+        "width": 992,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -131,8 +131,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        480,
-        512
+        1120,
+        576
       ],
       "id": "f29f7bc0-0c92-4d50-aff2-4482f85683b5",
       "name": "Enviar mensaje de rechazo",
@@ -154,7 +154,7 @@
       "typeVersion": 3.4,
       "position": [
         432,
-        240
+        288
       ],
       "id": "a7a3b30e-86a0-4e11-8cca-ea2d35e60ad3",
       "name": "Añadir error - Tiempo de solicitud"
@@ -201,8 +201,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        640,
-        240
+        736,
+        224
       ],
       "id": "5de578f4-9f8a-44aa-8403-86c7bce85e9c",
       "name": "Añadir error - Dias solicitados negativo"
@@ -226,7 +226,7 @@
           "values": [
             {
               "column": "email",
-              "value": "={{ $json.email }}123"
+              "value": "={{ $json.email }}"
             }
           ]
         },
@@ -235,8 +235,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        864,
-        -80
+        880,
+        0
       ],
       "id": "08e29fb8-7ba9-4c44-a042-cc69efd7c9cf",
       "name": "Obtener dias libres",
@@ -247,6 +247,132 @@
           "name": "Postgres - NeonTech"
         }
       }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eca95a0b-d398-4625-acaa-d6f7c5a17f56",
+              "leftValue": "={{ $('Extraer variables de la solicitud').item.json.daysRequested }}",
+              "rightValue": "={{ $json.vacation_days }}",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1088,
+        -16
+      ],
+      "id": "12cbd6b1-b9ea-432f-ba9a-d866091b4e67",
+      "name": "¿Tiene suficientes vacaciones?"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ok\": false,\n  \"message\": \"No tiene suficientes dias libres, cuenta con: {{ $('Obtener dias libres').item.json.vacation_days }}.\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1088,
+        256
+      ],
+      "id": "0d4cffce-fbbf-429e-8735-5418b6e82977",
+      "name": "Añadir error - No tiene suficientes vacaciones"
+    },
+    {
+      "parameters": {
+        "content": "## RRHH",
+        "height": 272,
+        "width": 512
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1296,
+        -384
+      ],
+      "typeVersion": 1,
+      "id": "fcdb45ce-7ccf-4d90-a62c-e7845188ff10",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=## Solicitud nueva: \nEmpleado: {{ $('Extraer variables de la solicitud').item.json.fullName }}\nEmail: {{ $('Extraer variables de la solicitud').item.json.email }}\n\nFecha de inicio: {{ $('Extraer variables de la solicitud').item.json.startDate }}\n\nFecha de retorno: {{ $('Extraer variables de la solicitud').item.json.endDate }}\n\n\n### Comentarios: {{ $('Extraer variables de la solicitud').item.json.comments }}\n\n## Aprobar o rechazar:\nPara continuar, [click aquí]({{ $execution.resumeFormUrl }})\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        -304
+      ],
+      "id": "42e45215-77c9-4343-8316-fc68e6bba056",
+      "name": "Enviar mensaje a RRHH",
+      "webhookId": "9d703086-b62d-461f-a9ea-2761b70cd37a",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "HWg9Lt4awUYpwpjC",
+          "name": "Discord - RRHH Webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "form",
+        "formTitle": "=Aprobar tiempo limite",
+        "formDescription": "=El empleado: {{ $('Extraer variables de la solicitud').item.json.fullName }}\n\nSolicita: {{ $('Extraer variables de la solicitud').item.json.daysRequested }} días\n\nEntre: {{ $('Extraer variables de la solicitud').item.json.startDate }} y {{ $('Extraer variables de la solicitud').item.json.endDate }}",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿Aprobar o rechazar?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Aprobar"
+                  },
+                  {
+                    "option": "Rechazar"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "limitWaitTime": true,
+        "resumeAmount": 2,
+        "resumeUnit": "days",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1552,
+        -304
+      ],
+      "id": "6a0780fc-aa92-42e5-9efb-95318289cc66",
+      "name": "Esperar a RRHH",
+      "webhookId": "68b8bd9a-ed2e-41a9-ad24-ada9c67de0b1"
     }
   ],
   "connections": {
@@ -324,6 +450,57 @@
         [
           {
             "node": "Enviar mensaje de rechazo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener dias libres": {
+      "main": [
+        [
+          {
+            "node": "¿Tiene suficientes vacaciones?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Tiene suficientes vacaciones?": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje a RRHH",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Añadir error - No tiene suficientes vacaciones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Añadir error - No tiene suficientes vacaciones": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje de rechazo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar mensaje a RRHH": {
+      "main": [
+        [
+          {
+            "node": "Esperar a RRHH",
             "type": "main",
             "index": 0
           }
