@@ -1,0 +1,1322 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Solicitud de vacaciones",
+        "formDescription": "Aquí puedes solicitar tus vacaciones o días libres por enfermedad.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Vacaciones / Parte Médico",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Vacaciones"
+                  },
+                  {
+                    "option": "Medico"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Nombre completo",
+              "placeholder": "Nombre completo del empleado ",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Correo electrónico",
+              "fieldType": "email",
+              "placeholder": "juan@example.com",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Fecha inicio",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Fecha retorno",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Comentarios",
+              "fieldType": "textarea",
+              "placeholder": "Comentarios adicionales de la solicitud"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Enviar",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "Información enviada correctamente"
+            }
+          },
+          "customCss": ":root {\n\t--font-family: 'Open Sans', sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 600;\n\t--font-size-body: 12px;\n\t--font-size-label: 13px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 20px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 28px;\n\t--font-size-html-h2: 20px;\n\t--font-size-html-h3: 16px;\n\t--font-size-html-h4: 14px;\n\t--font-size-html-h5: 12px;\n\t--font-size-html-h6: 10px;\n\t--font-size-subheader: 14px;\n\t\n\t/* Colors */\n\t--color-background: #e8e8e8;\n\t--color-test-notice-text: #e6a23d;\n\t--color-test-notice-bg: #fefaf6;\n\t--color-test-notice-border: #f6dcb7;\n\t--color-card-bg: #ffffff;\n\t--color-card-border: #e0e0e0;\n\t--color-card-shadow: rgba(0, 0, 0, 0.08);\n\t--color-link: #2196F3;\n\t--color-header: #333333;\n\t--color-label: #757575;\n\t--color-input-border: none;\n\t--color-input-border-bottom: #9e9e9e;\n\t--color-input-border-hover: #616161;\n\t--color-input-text: #333333;\n\t--color-focus-border: #2196F3;\n\t--color-submit-btn-bg: #2196F3;\n\t--color-submit-btn-bg-disabled: #e0e0e0;\n\t--color-submit-btn-text: #ffffff;\n\t--color-submit-btn-text-disabled: #a0a0a0;\n\t--color-submit-btn-hover: #1976D2;\n\t--color-error: #ea1f30;\n\t--color-required: #ff6d5a;\n\t--color-clear-button-bg: #7e8186;\n\t--color-html-text: #555;\n\t--color-html-link: #2196F3;\n\t--color-header-subtext: #757575;\n\t\n\t/* Border Radii */\n\t--border-radius-card: 8px;\n\t--border-radius-input: 0px;\n\t--border-radius-button: 4px;\n\t--border-radius-clear-btn: 50%;\n\t--card-border-radius: 8px;\n\t\n\t/* Spacing */\n\t--padding-container-top: 32px;\n\t--padding-card: 32px;\n\t--padding-test-notice-vertical: 12px;\n\t--padding-test-notice-horizontal: 24px;\n\t--margin-bottom-card: 20px;\n\t--padding-form-input: 8px 2px;\n\t--card-padding: 32px;\n\t--card-margin-bottom: 20px;\n\t\n\t/* Dimensions */\n\t--container-width: 448px;\n\t--submit-btn-height: 48px;\n\t--checkbox-size: 18px;\n\t--input-border-bottom-width: 2px;\n\t\n\t/* Others */\n\t--box-shadow-card: 0px 2px 8px 0px var(--color-card-shadow);\n\t--opacity-placeholder: 0.5;\n\t--transition-speed: 0.2s;\n}\n\n"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -1056,
+        1104
+      ],
+      "id": "f9b87fab-8252-49dd-80e7-d766a09018b4",
+      "name": "Nueva solicitud de tiempo libre",
+      "webhookId": "b54c81ff-febf-4771-921c-212a38862d43"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"leaveType\": \"{{ $json['Vacaciones / Parte Médico'] }}\",\n  \"email\": \"{{ $json['Correo electrónico'] }}\",\n  \"fullName\": \"{{ $json['Nombre completo'] }}\",\n  \"startDate\": \"{{ $json['Fecha inicio'] }}\",\n  \"endDate\": \"{{ $json['Fecha retorno'] }}\",\n  \"comments\": \"{{ $json.Comentarios }}\",\n  \"daysRequested\": {{ \n    (\n      $json['Fecha retorno'].toDateTime() \n      -  \n      $json['Fecha inicio'].toDateTime()\n    )\n    /\n    (1000 * 60 * 60 * 24 )\n  }}\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -848,
+        1104
+      ],
+      "id": "00a9c172-de3a-4ae8-8605-322c157e4919",
+      "name": "Extraer variables de la solicitud"
+    },
+    {
+      "parameters": {
+        "content": "## Validaciones",
+        "height": 544,
+        "width": 928,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "e7236b5e-bf76-4d47-9886-59cffce4975a",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8d457611-5ac1-441a-ac74-5b59dbc72d17",
+              "leftValue": "={{ $json.startDate.toDateTime().plus(7, 'days') }}",
+              "rightValue": "={{ $now }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        400
+      ],
+      "id": "6ca4aa08-a7f3-4247-abae-1ebedb993b80",
+      "name": "¿Es mayor a hoy + 7 dias?"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Extraer variables de la solicitud').item.json.email }}",
+        "subject": "Rechazo de sollicitud",
+        "message": "=<!doctype html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Rechazo de solicitud</title>\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n  <style>\n    .card {\n      margin: 0 auto;\n      max-width: 560px;\n      border-radius: 16px;\n      background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);\n      border: 1px solid #e5e7eb;\n      /* sombras en capas para que se note en Gmail */\n      box-shadow: \n        0 8px 24px rgba(0,0,0,0.28),\n        0 12px 32px rgba(0,0,0,0.22),\n        0 2px 6px rgba(0,0,0,0.15);\n    }\n    .content {\n      padding: 28px;\n      font: 15px/1.6 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;\n      color:#1f2937;\n    }\n    .h1 {\n      margin:0 0 12px;\n      font-size:22px;\n      font-weight:700;\n      color:#111827;\n      text-align:center;\n    }\n    .p { \n      margin:0 0 18px; \n      text-align:center; \n    }\n    .footer {\n      margin-top:20px;\n      font-size:12px;\n      color:#6b7280;\n      text-align:center;\n      border-top:1px solid #e5e7eb;\n      padding-top:12px;\n    }\n  </style>\n</head>\n<body style=\"margin:0; padding:32px 14px; background:#ffffff;\">\n  <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\">\n    <tr>\n      <td align=\"center\">\n        <div class=\"card\">\n          <div class=\"content\">\n            <h1 class=\"h1\">Rechazo de solicitud</h1>\n            <p class=\"p\">\n              Motivo: {{ $json.message }}<br>\n              Para más información, comuníquese con RRHH a\n              <a href=\"mailto:rrhh@empresa.com\" style=\"color:#2563eb; text-decoration:none;\">rrhh@empresa.com</a>\n            </p>\n            <div class=\"footer\">\n              Este mensaje fue generado automáticamente.<br>\n              Por favor, no responda a este correo ya que no será leído.<br>\n              Si necesita asistencia adicional, comuníquese con el área de RRHH.\n            </div>\n          </div>\n        </div>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        736,
+        976
+      ],
+      "id": "4f98fd23-7f69-4eb2-b01d-e9a1ff211a22",
+      "name": "Enviar mensaje de rechazo",
+      "webhookId": "8a12a72d-7417-4e2a-88e3-6cab55fe52fd",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jG503Egv0gBIaG41",
+          "name": "Gmail account - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ok\": false,\n  \"message\": \"Se debe solicitar con 7 dias de antelación.\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        704
+      ],
+      "id": "37b99b54-13c4-4e32-8701-d871685d6a23",
+      "name": "Añadir error - Tiempo de solicitud"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "620a6030-f5c2-4110-b63f-8f3b9945861b",
+              "leftValue": "={{ $json.daysRequested }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        304,
+        384
+      ],
+      "id": "ed77f3cb-6a4e-4dcb-a12b-3fc762443450",
+      "name": "¿Los dias solicitados son positivos?"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ok\": false,\n  \"message\": \"solicitud {{ $json.daysRequested }}, los dias solicitados son negativos, por lo que la fecha de retorno es inferior a la de inicio. Intente realizar una nueva solicitud.\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        304,
+        608
+      ],
+      "id": "b252bd9f-28f3-43b1-8dd4-9dc7ae474ba0",
+      "name": "Añadir error - Dias solicitados negativo"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eca95a0b-d398-4625-acaa-d6f7c5a17f56",
+              "leftValue": "={{ $('Extraer variables de la solicitud').item.json.daysRequested }}",
+              "rightValue": "={{ $json.vacation_days }}",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        736,
+        400
+      ],
+      "id": "8d9ef43c-9609-4e75-8dc0-779d9000bb67",
+      "name": "¿Tiene suficientes vacaciones?"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ok\": false,\n  \"message\": \"No tiene suficientes dias libres, cuenta con: {{ $('Obtener dias libres').item.json.vacation_days }}.\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        736,
+        672
+      ],
+      "id": "fce7c2e3-c4d2-47df-88ab-69a36d834290",
+      "name": "Añadir error - No tiene suficientes vacaciones"
+    },
+    {
+      "parameters": {
+        "content": "## RRHH - Petición",
+        "height": 800,
+        "width": 464,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1056,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "76204cb4-0368-4da0-9e6d-2bdcc4269cdb",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=## Solicitud nueva: \nEmpleado: {{ $('Extraer variables de la solicitud').item.json.fullName }}\nEmail: {{ $('Extraer variables de la solicitud').item.json.email }}\n\nFecha de inicio: {{ $('Extraer variables de la solicitud').item.json.startDate }}\n\nFecha de retorno: {{ $('Extraer variables de la solicitud').item.json.endDate }}\n\n\n### Comentarios: {{ $('Extraer variables de la solicitud').item.json.comments }}\n\n## Aprobar o rechazar:\nPara continuar, [click aquí]({{ $execution.resumeFormUrl }})\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        656
+      ],
+      "id": "be9cda0e-03bf-491d-a93a-7f22c940e13c",
+      "name": "Enviar mensaje a RRHH",
+      "webhookId": "98132009-788f-4d98-a5e4-4a9e54bd2f0a",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "HWg9Lt4awUYpwpjC",
+          "name": "Discord - RRHH Webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "form",
+        "formTitle": "=Aprobar tiempo limite",
+        "formDescription": "=El empleado: {{ $('Extraer variables de la solicitud').item.json.fullName }}\n\nSolicita: {{ $('Extraer variables de la solicitud').item.json.daysRequested }} días\n\nEntre: {{ $('Extraer variables de la solicitud').item.json.startDate }} y {{ $('Extraer variables de la solicitud').item.json.endDate }}",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "¿Aprobar o rechazar?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Aprobar"
+                  },
+                  {
+                    "option": "Rechazar"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Motivo",
+              "fieldType": "textarea",
+              "placeholder": "Motivo por el cual no podemos aprobarlo",
+              "requiredField": true
+            }
+          ]
+        },
+        "limitWaitTime": true,
+        "resumeAmount": 2,
+        "resumeUnit": "days",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        656
+      ],
+      "id": "8d02008c-1bd0-4b77-ad74-2e3bce3ac0de",
+      "name": "Esperar a RRHH 48 hs",
+      "webhookId": "533520e4-e14e-4139-b886-acfde9c2cce1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eca95a0b-d398-4625-acaa-d6f7c5a17f56",
+              "leftValue": "={{ $json['¿Aprobar o rechazar?'] }}",
+              "rightValue": "=Aprobar",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1792,
+        416
+      ],
+      "id": "3aa0500b-d1d7-445b-8b35-8bb24baf0c85",
+      "name": "¿RRHH aprueba la solicitud?"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ok\": false,\n  \"message\": \"{{ $json.Motivo }}.\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1792,
+        640
+      ],
+      "id": "959eb667-062c-4fba-a02b-bb8546c83d82",
+      "name": "Añadir error - RRHH rechazo la solicitud"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Extraer variables de la solicitud').item.json.email }}",
+        "subject": "Rechazo de sollicitud",
+        "message": "=<!doctype html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Rechazo de solicitud</title>\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n  <style>\n    .card {\n      margin: 0 auto;\n      max-width: 560px;\n      border-radius: 16px;\n      background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);\n      border: 1px solid #e5e7eb;\n      /* sombras en capas para que se note en Gmail */\n      box-shadow: \n        0 8px 24px rgba(0,0,0,0.28),\n        0 12px 32px rgba(0,0,0,0.22),\n        0 2px 6px rgba(0,0,0,0.15);\n    }\n    .content {\n      padding: 28px;\n      font: 15px/1.6 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;\n      color:#1f2937;\n    }\n    .h1 {\n      margin:0 0 12px;\n      font-size:22px;\n      font-weight:700;\n      color:#111827;\n      text-align:center;\n    }\n    .p { \n      margin:0 0 18px; \n      text-align:center; \n    }\n    .footer {\n      margin-top:20px;\n      font-size:12px;\n      color:#6b7280;\n      text-align:center;\n      border-top:1px solid #e5e7eb;\n      padding-top:12px;\n    }\n  </style>\n</head>\n<body style=\"margin:0; padding:32px 14px; background:#ffffff;\">\n  <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\">\n    <tr>\n      <td align=\"center\">\n        <div class=\"card\">\n          <div class=\"content\">\n            <h1 class=\"h1\">Rechazo de solicitud</h1>\n            <p class=\"p\">\n              Motivo: {{ $json.message }}<br>\n              Para más información, comuníquese con RRHH a\n              <a href=\"mailto:rrhh@empresa.com\" style=\"color:#2563eb; text-decoration:none;\">rrhh@empresa.com</a>\n            </p>\n            <div class=\"footer\">\n              Este mensaje fue generado automáticamente.<br>\n              Por favor, no responda a este correo ya que no será leído.<br>\n              Si necesita asistencia adicional, comuníquese con el área de RRHH.\n            </div>\n          </div>\n        </div>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1792,
+        976
+      ],
+      "id": "bfd07988-85db-415e-acb3-f1c7bd061e1f",
+      "name": "Enviar mensaje -  Rechazado por RRHH",
+      "webhookId": "9a170893-6871-4f53-aa12-248f417463a9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jG503Egv0gBIaG41",
+          "name": "Gmail account - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Respuesta al solicitante",
+        "height": 224,
+        "width": 928
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        912
+      ],
+      "typeVersion": 1,
+      "id": "a3f7ec6f-26ee-4d0a-a396-9e0207d32f43",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Validación de aprobación",
+        "height": 544,
+        "width": 464,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1616,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "404b5316-b7be-490e-8ac8-457b54c22dd1",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "                   Respuesta al solicitante",
+        "height": 224,
+        "width": 464
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1616,
+        912
+      ],
+      "typeVersion": 1,
+      "id": "32a91b0b-7fa6-44dc-904b-fb3c96e9eb73",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "59752d8bcea5c861268e92a441c0bc2a8db5198093c3fe5a87b05acb01e83513@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Tiempo libre de empleados"
+        },
+        "start": "={{ $('¿Los dias solicitados son positivos?').item.json.startDate }}",
+        "end": "={{ $('¿Los dias solicitados son positivos?').item.json.endDate }}",
+        "additionalFields": {
+          "summary": "=Vacaciones de {{ $('Extraer variables de la solicitud').item.json.fullName }}\n\nTiempo solicitado: {{ $('Extraer variables de la solicitud').item.json.daysRequested }} días."
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        2192,
+        528
+      ],
+      "id": "ef3a9afd-5199-4952-a284-989f30ce46bb",
+      "name": "Crear evento de vacaciones del empleado",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "0TcOAODdxPAHzMgu",
+          "name": "Google Calendar - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Receso otorgado",
+        "height": 544,
+        "width": 464,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2144,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "a61e0699-f24d-405a-ae2f-0a633160d80c",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "days_of",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "=id",
+              "condition": "eq",
+              "keyValue": "={{ $('Obtener dias libres Supabase').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "=vacation_days",
+              "fieldValue": "={{ $('Obtener dias libres Supabase').item.json.vacation_days - $('¿Los dias solicitados son positivos?').item.json.daysRequested }} "
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2416,
+        528
+      ],
+      "id": "2d5da06a-c66b-40f2-b10c-65684be8ffba",
+      "name": "Actualizar dias de vacaciones",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "QTSYzw0qqUkcpPYf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "                  Aviso de solicitud aprobada",
+        "height": 224,
+        "width": 464
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2144,
+        912
+      ],
+      "typeVersion": 1,
+      "id": "ca663cb3-b45e-4214-acfd-958fca7060d8",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Extraer variables de la solicitud').item.json.email }}",
+        "subject": "Aprobación de sollicitud",
+        "message": "=<!doctype html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Aprobación de solicitud</title>\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n  <style>\n    .card {\n      margin: 0 auto;\n      max-width: 560px;\n      border-radius: 16px;\n      background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);\n      border: 1px solid #e5e7eb;\n      /* sombras en capas para que se note en Gmail */\n      box-shadow: \n        0 8px 24px rgba(0,0,0,0.28),\n        0 12px 32px rgba(0,0,0,0.22),\n        0 2px 6px rgba(0,0,0,0.15);\n    }\n    .content {\n      padding: 28px;\n      font: 15px/1.6 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;\n      color:#1f2937;\n    }\n    .h1 {\n      margin:0 0 12px;\n      font-size:22px;\n      font-weight:700;\n      color:#111827;\n      text-align:center;\n    }\n    .p { \n      margin:0 0 18px; \n      text-align:center; \n    }\n    .footer {\n      margin-top:20px;\n      font-size:12px;\n      color:#6b7280;\n      text-align:center;\n      border-top:1px solid #e5e7eb;\n      padding-top:12px;\n    }\n  </style>\n</head>\n<body style=\"margin:0; padding:32px 14px; background:#ffffff;\">\n  <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\">\n    <tr>\n      <td align=\"center\">\n        <div class=\"card\">\n          <div class=\"content\">\n            <h1 class=\"h1\">Aprobación de solicitud</h1>\n            <p class=\"p\">\n              Felicidades, su solicitud ha sido aprobada. <br>\n              Para más información, comuníquese con RRHH a\n              <a href=\"mailto:rrhh@empresa.com\" style=\"color:#2563eb; text-decoration:none;\">rrhh@empresa.com</a>\n            </p>\n            <div class=\"footer\">\n              Este mensaje fue generado automáticamente.<br>\n              Por favor, no responda a este correo ya que no será leído.<br>\n              Si necesita asistencia adicional, comuníquese con el área de RRHH.\n            </div>\n          </div>\n        </div>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2320,
+        976
+      ],
+      "id": "bc593e3d-8bb7-4e2b-bd4e-3171ae8661cc",
+      "name": "Enviar mensaje -  Aprobado por RRHH",
+      "webhookId": "d39f06fb-8b72-43f1-b7b2-4c38bb1bb4a6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jG503Egv0gBIaG41",
+          "name": "Gmail account - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "days_of"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        528,
+        432
+      ],
+      "id": "7b26d9fd-9c62-4b01-ab16-1b9b66fb118d",
+      "name": "Obtener dias libres Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "QTSYzw0qqUkcpPYf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Inicio de trámite de receso laboral\n",
+        "height": 352,
+        "width": 720,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1104,
+        992
+      ],
+      "typeVersion": 1,
+      "id": "70d248f2-bca8-4390-9cc9-c76b3dd32242",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b70373bf-a6c1-4c40-a3ba-fdf55d5f41b5",
+              "leftValue": "={{ $json.leaveType }}",
+              "rightValue": "Vacaciones",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -608,
+        1104
+      ],
+      "id": "9f5be7da-c7e1-4dff-90ec-64d18631c2b8",
+      "name": "¿Vacaciones o parte médico?"
+    },
+    {
+      "parameters": {
+        "content": "## Validaciones",
+        "height": 544,
+        "width": 928,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        16,
+        1344
+      ],
+      "typeVersion": 1,
+      "id": "11958b9b-615a-42b7-8b54-bd931c3439e5",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "620a6030-f5c2-4110-b63f-8f3b9945861b",
+              "leftValue": "={{ $json.daysRequested }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        1424
+      ],
+      "id": "e973330d-e1a5-47ff-a7e0-e30539dc932e",
+      "name": "¿Los dias por enfermedad son positivos?"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ok\": false,\n  \"message\": \"solicitud {{ $json.daysRequested }}, los dias solicitados son negativos, por lo que la fecha de retorno es inferior a la de inicio. Intente realizar una nueva solicitud.\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        96,
+        1680
+      ],
+      "id": "72988027-74e3-4def-ac96-0f2e22bae865",
+      "name": "Añadir error - Dias solicitados son negativo"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Extraer variables de la solicitud').item.json.email }}",
+        "subject": "Rechazo de sollicitud",
+        "message": "=<!doctype html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Rechazo de días por enfermedad</title>\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n  <style>\n    .card {\n      margin: 0 auto;\n      max-width: 560px;\n      border-radius: 16px;\n      background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);\n      border: 1px solid #e5e7eb;\n      box-shadow:\n        0 8px 24px rgba(0,0,0,0.28),\n        0 12px 32px rgba(0,0,0,0.22),\n        0 2px 6px rgba(0,0,0,0.15);\n    }\n    .content {\n      padding: 28px;\n      font: 15px/1.6 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;\n      color:#1f2937;\n    }\n    .h1 {\n      margin:0 0 12px;\n      font-size:22px;\n      font-weight:700;\n      color:#b91c1c;\n      text-align:center;\n    }\n    .p {\n      margin:0 0 18px;\n      text-align:center;\n    }\n    .footer {\n      margin-top:20px;\n      font-size:12px;\n      color:#6b7280;\n      text-align:center;\n      border-top:1px solid #e5e7eb;\n      padding-top:12px;\n    }\n  </style>\n</head>\n<body style=\"margin:0; padding:32px 14px; background:#ffffff;\">\n  <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\">\n    <tr>\n      <td align=\"center\">\n        <div class=\"card\">\n          <div class=\"content\">\n            <h1 class=\"h1\">Solicitud de días por enfermedad rechazada</h1>\n            <p class=\"p\">\n              Estimado/a {{ $('Extraer variables de la solicitud').item.json.fullName }},<br><br>\n              Lamentamos informarle que su solicitud de días por enfermedad ha sido <strong>rechazada</strong>.<br><br>\n              <strong>Motivo: {{ $json.message }}</strong> <br><br>\n              Si necesita más información o desea realizar una aclaración, comuníquese con el área de RRHH a\n              <a href=\"mailto:rrhh@empresa.com\" style=\"color:#2563eb; text-decoration:none;\">rrhh@empresa.com</a>.\n            </p>\n            <div class=\"footer\">\n              Este mensaje fue generado automáticamente.<br>\n              Por favor, no responda a este correo ya que no será leído.<br>\n              Si necesita asistencia adicional, comuníquese con RRHH.\n            </div>\n          </div>\n        </div>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        736,
+        1984
+      ],
+      "id": "2de93113-c9c4-49f5-ae7f-84cb2eb9a894",
+      "name": "Enviar mensaje de rechazo1",
+      "webhookId": "fdf62ab5-c513-4adf-a9dd-0d49403de181",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jG503Egv0gBIaG41",
+          "name": "Gmail account - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Respuesta al solicitante",
+        "height": 224,
+        "width": 928
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        16,
+        1920
+      ],
+      "typeVersion": 1,
+      "id": "b39c44a9-22a1-4c37-b0ea-2702d70cfa11",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "days_of"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        416,
+        1552
+      ],
+      "id": "5144879e-1f33-4764-9dc7-b653ca20f051",
+      "name": "Obtener dias disponibles por enfermedad",
+      "credentials": {
+        "supabaseApi": {
+          "id": "QTSYzw0qqUkcpPYf",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eca95a0b-d398-4625-acaa-d6f7c5a17f56",
+              "leftValue": "={{ $('¿Vacaciones o parte médico?').item.json.daysRequested }}",
+              "rightValue": "={{ $json.sick_days }}",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        704,
+        1424
+      ],
+      "id": "3cd157d0-6e29-4590-9235-8784d5cdfa4f",
+      "name": "¿Tiene suficientes días por enfermedad?"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"ok\": false,\n  \"message\": \"No tiene suficientes dias libres, cuenta con: {{ $json.sick_days }} días disponibles y ha solicitado  {{ $('Extraer variables de la solicitud').item.json.daysRequested }} días.\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        1664
+      ],
+      "id": "1412cb66-972f-44a1-9951-fac642fcc2c9",
+      "name": "Añadir error - Ha exedido el limite de parte medico"
+    },
+    {
+      "parameters": {
+        "content": "## RRHH - Notificado",
+        "height": 800,
+        "width": 464,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1056,
+        1344
+      ],
+      "typeVersion": 1,
+      "id": "aaab623f-3c64-4d91-8c01-fae500b9e64f",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=## Solicitud nueva: \nEmpleado: {{ $('Extraer variables de la solicitud').item.json.fullName }}\nEmail: {{ $('Extraer variables de la solicitud').item.json.email }}\n\nFecha de inicio: {{ $('Extraer variables de la solicitud').item.json.startDate }}\n\nFecha de retorno: {{ $('Extraer variables de la solicitud').item.json.endDate }}\n\n\n### Comentarios: {{ $('Extraer variables de la solicitud').item.json.comments }}\n\n## RRHH queda notificado de su ausencia.\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        1680
+      ],
+      "id": "e61aa92f-af3e-4226-b43e-a27aca3d5eec",
+      "name": "Enviar mensaje a RRHH1",
+      "webhookId": "9a740bf9-8c78-4f89-a7e8-12607cfbf79a",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "HWg9Lt4awUYpwpjC",
+          "name": "Discord - RRHH Webhook"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "59752d8bcea5c861268e92a441c0bc2a8db5198093c3fe5a87b05acb01e83513@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Tiempo libre de empleados"
+        },
+        "start": "={{ $('Extraer variables de la solicitud').item.json.startDate }}",
+        "end": "={{ $('Extraer variables de la solicitud').item.json.endDate }}",
+        "additionalFields": {
+          "summary": "=Ausencia por enfermedad {{ $('Extraer variables de la solicitud').item.json.fullName }}\n\nTiempo informado: {{ $('Extraer variables de la solicitud').item.json.daysRequested }} días.\n\nDesde: {{ $('Extraer variables de la solicitud').item.json.startDate }}\n\nhasta: {{ $('Extraer variables de la solicitud').item.json.endDate }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1664,
+        1536
+      ],
+      "id": "872ce18c-3aa5-40b3-8ac0-77da7d737b9b",
+      "name": "Crear evento de vacaciones del empleado1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "GqNYPwJQssafSnCP",
+          "name": "Google Calendar - nikodev"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Receso otorgado",
+        "height": 544,
+        "width": 464,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1616,
+        1344
+      ],
+      "typeVersion": 1,
+      "id": "81964fdf-2e91-45de-a256-c6b824e5d4e6",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "                Aviso de solicitud aprobada",
+        "height": 224,
+        "width": 464
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1616,
+        1920
+      ],
+      "typeVersion": 1,
+      "id": "31e0762b-8450-42ba-ade1-31bb5afe3140",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Extraer variables de la solicitud').item.json.email }}",
+        "subject": "Notificación aceptada",
+        "message": "=<!doctype html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Aprobación de días por enfermedad</title>\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n  <style>\n    .card {\n      margin: 0 auto;\n      max-width: 560px;\n      border-radius: 16px;\n      background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);\n      border: 1px solid #e5e7eb;\n      box-shadow: \n        0 8px 24px rgba(0,0,0,0.28),\n        0 12px 32px rgba(0,0,0,0.22),\n        0 2px 6px rgba(0,0,0,0.15);\n    }\n    .content {\n      padding: 28px;\n      font: 15px/1.6 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;\n      color:#1f2937;\n    }\n    .h1 {\n      margin:0 0 12px;\n      font-size:22px;\n      font-weight:700;\n      color:#15803d;\n      text-align:center;\n    }\n    .p { \n      margin:0 0 18px; \n      text-align:center; \n    }\n    .footer {\n      margin-top:20px;\n      font-size:12px;\n      color:#6b7280;\n      text-align:center;\n      border-top:1px solid #e5e7eb;\n      padding-top:12px;\n    }\n  </style>\n</head>\n<body style=\"margin:0; padding:32px 14px; background:#ffffff;\">\n  <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\">\n    <tr>\n      <td align=\"center\">\n        <div class=\"card\">\n          <div class=\"content\">\n            <h1 class=\"h1\">Solicitud de días por enfermedad aprobada</h1>\n            <p class=\"p\">\n              Estimado/a {{ $('Extraer variables de la solicitud').item.json.fullName }},<br><br>\n              Nos complace informarle que su solicitud de días por enfermedad ha sido <strong>aprobada</strong>.<br><br>\n              <strong>Período autorizado:</strong> {{ $('Extraer variables de la solicitud').item.json.daysRequested }} días a partir de {{ $('Extraer variables de la solicitud').item.json.startDate }}.<br><br>\n              Si necesita más información o desea confirmar detalles, comuníquese con RRHH a<br>\n              <a href=\"mailto:rrhh@empresa.com\" style=\"color:#2563eb; text-decoration:none;\">rrhh@empresa.com</a>.\n            </p>\n            <div class=\"footer\">\n              Este mensaje fue generado automáticamente.<br>\n              Por favor, no responda a este correo ya que no será leído.<br>\n              Si necesita asistencia adicional, comuníquese con el área de RRHH.\n            </div>\n          </div>\n        </div>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1776,
+        1984
+      ],
+      "id": "7d02c809-8bc5-447e-90c4-f2d2ab060a52",
+      "name": "Enviar mensaje -  Aprobado por RRHH1",
+      "webhookId": "72474244-10f7-44af-bd00-434978d47483",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jG503Egv0gBIaG41",
+          "name": "Gmail account - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "days_of",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "=id",
+              "condition": "eq",
+              "keyValue": "={{ $('Obtener dias disponibles por enfermedad').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "=sick_days",
+              "fieldValue": "={{ $('Obtener dias disponibles por enfermedad').item.json.sick_days - $('Extraer variables de la solicitud').item.json.daysRequested }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1888,
+        1536
+      ],
+      "id": "0fceef75-39be-4da4-a8e3-1a7c5ecdf135",
+      "name": "Actualizar dias por enfermedad",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "QTSYzw0qqUkcpPYf",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Nueva solicitud de tiempo libre": {
+      "main": [
+        [
+          {
+            "node": "Extraer variables de la solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer variables de la solicitud": {
+      "main": [
+        [
+          {
+            "node": "¿Vacaciones o parte médico?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es mayor a hoy + 7 dias?": {
+      "main": [
+        [
+          {
+            "node": "¿Los dias solicitados son positivos?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Añadir error - Tiempo de solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Añadir error - Tiempo de solicitud": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje de rechazo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Los dias solicitados son positivos?": {
+      "main": [
+        [
+          {
+            "node": "Obtener dias libres Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Añadir error - Dias solicitados negativo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Añadir error - Dias solicitados negativo": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje de rechazo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Tiene suficientes vacaciones?": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje a RRHH",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Añadir error - No tiene suficientes vacaciones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Añadir error - No tiene suficientes vacaciones": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje de rechazo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar mensaje a RRHH": {
+      "main": [
+        [
+          {
+            "node": "Esperar a RRHH 48 hs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Esperar a RRHH 48 hs": {
+      "main": [
+        [
+          {
+            "node": "¿RRHH aprueba la solicitud?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿RRHH aprueba la solicitud?": {
+      "main": [
+        [
+          {
+            "node": "Crear evento de vacaciones del empleado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Añadir error - RRHH rechazo la solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Añadir error - RRHH rechazo la solicitud": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje -  Rechazado por RRHH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear evento de vacaciones del empleado": {
+      "main": [
+        [
+          {
+            "node": "Actualizar dias de vacaciones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar dias de vacaciones": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje -  Aprobado por RRHH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener dias libres Supabase": {
+      "main": [
+        [
+          {
+            "node": "¿Tiene suficientes vacaciones?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Vacaciones o parte médico?": {
+      "main": [
+        [
+          {
+            "node": "¿Es mayor a hoy + 7 dias?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "¿Los dias por enfermedad son positivos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Los dias por enfermedad son positivos?": {
+      "main": [
+        [
+          {
+            "node": "Obtener dias disponibles por enfermedad",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Añadir error - Dias solicitados son negativo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Añadir error - Dias solicitados son negativo": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje de rechazo1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener dias disponibles por enfermedad": {
+      "main": [
+        [
+          {
+            "node": "¿Tiene suficientes días por enfermedad?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Tiene suficientes días por enfermedad?": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje a RRHH1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Añadir error - Ha exedido el limite de parte medico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Añadir error - Ha exedido el limite de parte medico": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje de rechazo1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar mensaje a RRHH1": {
+      "main": [
+        [
+          {
+            "node": "Crear evento de vacaciones del empleado1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear evento de vacaciones del empleado1": {
+      "main": [
+        [
+          {
+            "node": "Actualizar dias por enfermedad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar dias por enfermedad": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje -  Aprobado por RRHH1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
+  }
+}
