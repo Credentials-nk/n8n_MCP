@@ -2,85 +2,15 @@
   "nodes": [
     {
       "parameters": {
-        "formTitle": "Solicitud de vacaciones",
-        "formDescription": "Aquí puedes solicitar tus vacaciones o días libres por enfermedad.",
-        "formFields": {
-          "values": [
-            {
-              "fieldLabel": "Vacaciones / Parte Médico",
-              "fieldType": "dropdown",
-              "fieldOptions": {
-                "values": [
-                  {
-                    "option": "Vacaciones"
-                  },
-                  {
-                    "option": "Medico"
-                  }
-                ]
-              },
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "Nombre completo",
-              "placeholder": "Nombre completo del empleado ",
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "Correo electrónico",
-              "fieldType": "email",
-              "placeholder": "juan@example.com",
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "Fecha inicio",
-              "fieldType": "date",
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "Fecha retorno",
-              "fieldType": "date",
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "Comentarios",
-              "fieldType": "textarea",
-              "placeholder": "Comentarios adicionales de la solicitud"
-            }
-          ]
-        },
-        "options": {
-          "appendAttribution": false,
-          "buttonLabel": "Enviar",
-          "respondWithOptions": {
-            "values": {
-              "formSubmittedText": "Información enviada correctamente"
-            }
-          },
-          "customCss": ":root {\n\t--font-family: 'Open Sans', sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 600;\n\t--font-size-body: 12px;\n\t--font-size-label: 13px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 20px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 28px;\n\t--font-size-html-h2: 20px;\n\t--font-size-html-h3: 16px;\n\t--font-size-html-h4: 14px;\n\t--font-size-html-h5: 12px;\n\t--font-size-html-h6: 10px;\n\t--font-size-subheader: 14px;\n\t\n\t/* Colors */\n\t--color-background: #e8e8e8;\n\t--color-test-notice-text: #e6a23d;\n\t--color-test-notice-bg: #fefaf6;\n\t--color-test-notice-border: #f6dcb7;\n\t--color-card-bg: #ffffff;\n\t--color-card-border: #e0e0e0;\n\t--color-card-shadow: rgba(0, 0, 0, 0.08);\n\t--color-link: #2196F3;\n\t--color-header: #333333;\n\t--color-label: #757575;\n\t--color-input-border: none;\n\t--color-input-border-bottom: #9e9e9e;\n\t--color-input-border-hover: #616161;\n\t--color-input-text: #333333;\n\t--color-focus-border: #2196F3;\n\t--color-submit-btn-bg: #2196F3;\n\t--color-submit-btn-bg-disabled: #e0e0e0;\n\t--color-submit-btn-text: #ffffff;\n\t--color-submit-btn-text-disabled: #a0a0a0;\n\t--color-submit-btn-hover: #1976D2;\n\t--color-error: #ea1f30;\n\t--color-required: #ff6d5a;\n\t--color-clear-button-bg: #7e8186;\n\t--color-html-text: #555;\n\t--color-html-link: #2196F3;\n\t--color-header-subtext: #757575;\n\t\n\t/* Border Radii */\n\t--border-radius-card: 8px;\n\t--border-radius-input: 0px;\n\t--border-radius-button: 4px;\n\t--border-radius-clear-btn: 50%;\n\t--card-border-radius: 8px;\n\t\n\t/* Spacing */\n\t--padding-container-top: 32px;\n\t--padding-card: 32px;\n\t--padding-test-notice-vertical: 12px;\n\t--padding-test-notice-horizontal: 24px;\n\t--margin-bottom-card: 20px;\n\t--padding-form-input: 8px 2px;\n\t--card-padding: 32px;\n\t--card-margin-bottom: 20px;\n\t\n\t/* Dimensions */\n\t--container-width: 448px;\n\t--submit-btn-height: 48px;\n\t--checkbox-size: 18px;\n\t--input-border-bottom-width: 2px;\n\t\n\t/* Others */\n\t--box-shadow-card: 0px 2px 8px 0px var(--color-card-shadow);\n\t--opacity-placeholder: 0.5;\n\t--transition-speed: 0.2s;\n}\n\n"
-        }
-      },
-      "type": "n8n-nodes-base.formTrigger",
-      "typeVersion": 2.3,
-      "position": [
-        -1056,
-        1104
-      ],
-      "id": "f9b87fab-8252-49dd-80e7-d766a09018b4",
-      "name": "Nueva solicitud de tiempo libre",
-      "webhookId": "b54c81ff-febf-4771-921c-212a38862d43"
-    },
-    {
-      "parameters": {
         "mode": "raw",
-        "jsonOutput": "={\n  \"leaveType\": \"{{ $json['Vacaciones / Parte Médico'] }}\",\n  \"email\": \"{{ $json['Correo electrónico'] }}\",\n  \"fullName\": \"{{ $json['Nombre completo'] }}\",\n  \"startDate\": \"{{ $json['Fecha inicio'] }}\",\n  \"endDate\": \"{{ $json['Fecha retorno'] }}\",\n  \"comments\": \"{{ $json.Comentarios }}\",\n  \"daysRequested\": {{ \n    (\n      $json['Fecha retorno'].toDateTime() \n      -  \n      $json['Fecha inicio'].toDateTime()\n    )\n    /\n    (1000 * 60 * 60 * 24 )\n  }}\n}\n",
+        "jsonOutput": "={\n\n  \"email\": \"{{ $json.data.email }}\",\n  \"fullName\": \"{{ $json.data.fullName }}\",\n  \"startDate\": \"{{ $json.data.startDate }}\",\n  \"endDate\": \"{{ $json.data.endDate }}\",\n  \"comments\": \"{{ $json.data.comments }}\",\n  \"daysRequested\": {{ (\n      $json.data.endDate.toDateTime() \n      - \n      $json.data.startDate.toDateTime() )    \n      /\n      (1000 * 60 * 60 * 24 ) }}\n}\n",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -848,
-        1104
+        -736,
+        1152
       ],
       "id": "00a9c172-de3a-4ae8-8605-322c157e4919",
       "name": "Extraer variables de la solicitud"
@@ -94,7 +24,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        0,
+        -96,
         336
       ],
       "typeVersion": 1,
@@ -128,7 +58,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        80,
+        -16,
         400
       ],
       "id": "6ca4aa08-a7f3-4247-abae-1ebedb993b80",
@@ -146,7 +76,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        736,
+        640,
         976
       ],
       "id": "4f98fd23-7f69-4eb2-b01d-e9a1ff211a22",
@@ -168,7 +98,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        80,
+        -16,
         704
       ],
       "id": "37b99b54-13c4-4e32-8701-d871685d6a23",
@@ -201,7 +131,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        304,
+        208,
         384
       ],
       "id": "ed77f3cb-6a4e-4dcb-a12b-3fc762443450",
@@ -216,7 +146,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        304,
+        208,
         608
       ],
       "id": "b252bd9f-28f3-43b1-8dd4-9dc7ae474ba0",
@@ -249,7 +179,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        736,
+        640,
         400
       ],
       "id": "8d9ef43c-9609-4e75-8dc0-779d9000bb67",
@@ -264,7 +194,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        736,
+        640,
         672
       ],
       "id": "fce7c2e3-c4d2-47df-88ab-69a36d834290",
@@ -279,7 +209,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1056,
+        960,
         336
       ],
       "typeVersion": 1,
@@ -295,7 +225,7 @@
       "type": "n8n-nodes-base.discord",
       "typeVersion": 2,
       "position": [
-        1136,
+        1040,
         656
       ],
       "id": "be9cda0e-03bf-491d-a93a-7f22c940e13c",
@@ -348,7 +278,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1344,
+        1248,
         656
       ],
       "id": "8d02008c-1bd0-4b77-ad74-2e3bce3ac0de",
@@ -382,7 +312,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1792,
+        1696,
         416
       ],
       "id": "3aa0500b-d1d7-445b-8b35-8bb24baf0c85",
@@ -397,7 +327,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1792,
+        1696,
         640
       ],
       "id": "959eb667-062c-4fba-a02b-bb8546c83d82",
@@ -415,7 +345,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1792,
+        1696,
         976
       ],
       "id": "bfd07988-85db-415e-acb3-f1c7bd061e1f",
@@ -436,7 +366,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        0,
+        -96,
         912
       ],
       "typeVersion": 1,
@@ -452,7 +382,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1616,
+        1520,
         336
       ],
       "typeVersion": 1,
@@ -467,7 +397,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1616,
+        1520,
         912
       ],
       "typeVersion": 1,
@@ -491,7 +421,7 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        2192,
+        2096,
         528
       ],
       "id": "ef3a9afd-5199-4952-a284-989f30ce46bb",
@@ -512,7 +442,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2144,
+        2048,
         336
       ],
       "typeVersion": 1,
@@ -544,7 +474,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2416,
+        2320,
         528
       ],
       "id": "2d5da06a-c66b-40f2-b10c-65684be8ffba",
@@ -565,7 +495,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2144,
+        2048,
         912
       ],
       "typeVersion": 1,
@@ -584,7 +514,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        2320,
+        2224,
         976
       ],
       "id": "bc593e3d-8bb7-4e2b-bd4e-3171ae8661cc",
@@ -605,7 +535,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        528,
+        432,
         432
       ],
       "id": "7b26d9fd-9c62-4b01-ab16-1b9b66fb118d",
@@ -620,14 +550,14 @@
     {
       "parameters": {
         "content": "## Inicio de trámite de receso laboral\n",
-        "height": 352,
-        "width": 720,
-        "color": 7
+        "height": 240,
+        "width": 464,
+        "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1104,
-        992
+        -800,
+        1088
       ],
       "typeVersion": 1,
       "id": "70d248f2-bca8-4390-9cc9-c76b3dd32242",
@@ -660,8 +590,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -608,
-        1104
+        -496,
+        1152
       ],
       "id": "9f5be7da-c7e1-4dff-90ec-64d18631c2b8",
       "name": "¿Vacaciones o parte médico?"
@@ -675,7 +605,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        16,
+        -80,
         1344
       ],
       "typeVersion": 1,
@@ -709,7 +639,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        80,
+        -16,
         1424
       ],
       "id": "e973330d-e1a5-47ff-a7e0-e30539dc932e",
@@ -724,7 +654,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        96,
+        0,
         1680
       ],
       "id": "72988027-74e3-4def-ac96-0f2e22bae865",
@@ -742,7 +672,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        736,
+        640,
         1984
       ],
       "id": "2de93113-c9c4-49f5-ae7f-84cb2eb9a894",
@@ -763,7 +693,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        16,
+        -80,
         1920
       ],
       "typeVersion": 1,
@@ -778,7 +708,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        416,
+        320,
         1552
       ],
       "id": "5144879e-1f33-4764-9dc7-b653ca20f051",
@@ -817,7 +747,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        704,
+        608,
         1424
       ],
       "id": "3cd157d0-6e29-4590-9235-8784d5cdfa4f",
@@ -832,7 +762,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        720,
+        624,
         1664
       ],
       "id": "1412cb66-972f-44a1-9951-fac642fcc2c9",
@@ -847,7 +777,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1056,
+        960,
         1344
       ],
       "typeVersion": 1,
@@ -863,7 +793,7 @@
       "type": "n8n-nodes-base.discord",
       "typeVersion": 2,
       "position": [
-        1232,
+        1136,
         1680
       ],
       "id": "e61aa92f-af3e-4226-b43e-a27aca3d5eec",
@@ -893,7 +823,7 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        1664,
+        1568,
         1536
       ],
       "id": "872ce18c-3aa5-40b3-8ac0-77da7d737b9b",
@@ -914,7 +844,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1616,
+        1520,
         1344
       ],
       "typeVersion": 1,
@@ -929,7 +859,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1616,
+        1520,
         1920
       ],
       "typeVersion": 1,
@@ -948,7 +878,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1776,
+        1680,
         1984
       ],
       "id": "7d02c809-8bc5-447e-90c4-f2d2ab060a52",
@@ -986,7 +916,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1888,
+        1792,
         1536
       ],
       "id": "0fceef75-39be-4da4-a8e3-1a7c5ecdf135",
@@ -998,20 +928,124 @@
           "name": "Supabase account"
         }
       }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "vacation/ask/form/001",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1552,
+        1536
+      ],
+      "id": "d1601f00-bee3-463a-9d58-ecf92f4583f5",
+      "name": "Webhook - POST - Solicitar vacaciones",
+      "webhookId": "4ec8ea6a-b494-426e-93fe-ab3595d11f22",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "VVqemsU5OBB3OA9N",
+          "name": "Header Auth Secret"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d38a756a-1c25-4c2c-a306-31539a5d02b6",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1376,
+        1168
+      ],
+      "id": "df208382-4342-455b-8c30-3ef38ea5105f",
+      "name": "¿Contiene los campos necesarios?"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1120,
+        1312
+      ],
+      "id": "da5fbe31-48c5-434f-91f7-34f97d456511",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1120,
+        1040
+      ],
+      "id": "73e2ecf3-f179-42a8-b763-627f2710d95b",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Espera un body como:\n// {\n//   \"Nombre completo\": \"Fernando Herrera\",\n//   \"Correo electrónico\": \"fernando.devtalles@gmail.com\",\n//   \"Fecha de inicio\": \"2025-08-19\",\n//   \"Fecha de retorno\": \"2025-08-23\",\n//   \"Comentarios\": \"Nada en especial\"\n// }\n\nconst src = $input.first().json.body;\nconst errors = [];\n\n// Helpers\nconst getStr = (v) => (v ?? '').toString().trim();\nconst isEmail = (v) => /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(v);\nconst ISO_DATE_RE = /^\\d{4}-\\d{2}-\\d{2}$/;\nconst parseISODate = (s) => new Date(`${s}T00:00:00Z`); // avoid server TZ issues\n\n// Extract and normalize\nconst fullName     = getStr(src['Nombre completo']);\nconst email        = getStr(src['Correo electrónico']).toLowerCase();\nconst startDateStr = getStr(src['Fecha inicio']);\nconst endDateStr   = getStr(src['Fecha retorno']);\nconst comments     = getStr(src['Comentarios']);\n\n// Validations\nif (!fullName) errors.push('Nombre completo es requerido.');\nif (!email) errors.push('Correo electrónico es requerido.');\nelse if (!isEmail(email)) errors.push('Correo electrónico inválido.');\n\nif (!startDateStr) errors.push('Fecha de inicio es requerida.');\nelse if (!ISO_DATE_RE.test(startDateStr))\n  errors.push('Fecha de inicio debe tener formato YYYY-MM-DD.');\n\nif (!endDateStr) errors.push('Fecha de retorno es requerida.');\nelse if (!ISO_DATE_RE.test(endDateStr))\n  errors.push('Fecha de retorno debe tener formato YYYY-MM-DD.');\n\n// Date comparison (only if format is valid)\nif (ISO_DATE_RE.test(startDateStr) && ISO_DATE_RE.test(endDateStr)) {\n  const startDate = parseISODate(startDateStr);\n  const endDate   = parseISODate(endDateStr);\n\n  if (Number.isNaN(startDate.valueOf())) errors.push('Fecha de inicio no es válida.');\n  if (Number.isNaN(endDate.valueOf())) errors.push('Fecha de retorno no es válida.');\n\n  // Must be strictly before\n  if (!Number.isNaN(startDate.valueOf()) && !Number.isNaN(endDate.valueOf()) && !(startDate < endDate)) {\n    errors.push('La fecha de inicio debe ser ANTES que la fecha de retorno.');\n  }\n}\n\n// Optional comments\nif (comments && comments.length > 500) {\n  errors.push('Comentarios no debe superar 500 caracteres.');\n}\n\n// Response for chaining with Webhook Response\nif (errors.length) {\n  return [\n    {\n      valid: false,\n      status: 400,\n      errors,\n    },\n  ];\n}\n\nreturn [\n  {\n    valid: true,\n    status: 200,\n    data: {\n      fullName,\n      email,\n      startDate: startDateStr,\n      endDate: endDateStr,\n      comments,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1584,
+        1168
+      ],
+      "id": "645eac94-5926-4d93-abdc-432f0fb96bfb",
+      "name": "Validar request webhook"
+    },
+    {
+      "parameters": {
+        "content": "## Trigger a partir del request\n",
+        "height": 448,
+        "width": 736,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1680,
+        1008
+      ],
+      "typeVersion": 1,
+      "id": "6db53aae-1761-414c-af57-ebe00bdc9b59",
+      "name": "Sticky Note13"
     }
   ],
   "connections": {
-    "Nueva solicitud de tiempo libre": {
-      "main": [
-        [
-          {
-            "node": "Extraer variables de la solicitud",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Extraer variables de la solicitud": {
       "main": [
         [
@@ -1313,10 +1347,62 @@
           }
         ]
       ]
+    },
+    "Webhook - POST - Solicitar vacaciones": {
+      "main": [
+        [
+          {
+            "node": "Validar request webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Contiene los campos necesarios?": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Extraer variables de la solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar request webhook": {
+      "main": [
+        [
+          {
+            "node": "¿Contiene los campos necesarios?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "pinData": {},
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
   }
 }
