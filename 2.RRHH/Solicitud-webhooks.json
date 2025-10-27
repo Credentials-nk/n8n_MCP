@@ -203,7 +203,7 @@
     {
       "parameters": {
         "content": "## RRHH - Petición",
-        "height": 800,
+        "height": 544,
         "width": 464,
         "color": 5
       },
@@ -219,14 +219,14 @@
     {
       "parameters": {
         "authentication": "webhook",
-        "content": "=## Solicitud nueva: \nEmpleado: {{ $('Extraer variables de la solicitud').item.json.fullName }}\nEmail: {{ $('Extraer variables de la solicitud').item.json.email }}\n\nFecha de inicio: {{ $('Extraer variables de la solicitud').item.json.startDate }}\n\nFecha de retorno: {{ $('Extraer variables de la solicitud').item.json.endDate }}\n\n\n### Comentarios: {{ $('Extraer variables de la solicitud').item.json.comments }}\n\n## Aprobar o rechazar:\nPara continuar, [click aquí]({{ $execution.resumeFormUrl }})\n\n",
+        "content": "=## Solicitud nueva: \nEmpleado: {{ $('Extraer variables de la solicitud').item.json.fullName }}\nEmail: {{ $('Extraer variables de la solicitud').item.json.email }}\n\nFecha de inicio: {{ $('Extraer variables de la solicitud').item.json.startDate }}\n\nFecha de retorno: {{ $('Extraer variables de la solicitud').item.json.endDate }}\n\n\n### Comentarios: {{ $('Extraer variables de la solicitud').item.json.comments }}\n\n## Aprobar o rechazar:\nPara continuar, [click aquí]({{ $execution.resumeUrl }})\n\n",
         "options": {}
       },
       "type": "n8n-nodes-base.discord",
       "typeVersion": 2,
       "position": [
-        1040,
-        656
+        1024,
+        416
       ],
       "id": "be9cda0e-03bf-491d-a93a-7f22c940e13c",
       "name": "Enviar mensaje a RRHH",
@@ -240,50 +240,29 @@
     },
     {
       "parameters": {
-        "resume": "form",
-        "formTitle": "=Aprobar tiempo limite",
-        "formDescription": "=El empleado: {{ $('Extraer variables de la solicitud').item.json.fullName }}\n\nSolicita: {{ $('Extraer variables de la solicitud').item.json.daysRequested }} días\n\nEntre: {{ $('Extraer variables de la solicitud').item.json.startDate }} y {{ $('Extraer variables de la solicitud').item.json.endDate }}",
-        "formFields": {
-          "values": [
-            {
-              "fieldLabel": "¿Aprobar o rechazar?",
-              "fieldType": "dropdown",
-              "fieldOptions": {
-                "values": [
-                  {
-                    "option": "Aprobar"
-                  },
-                  {
-                    "option": "Rechazar"
-                  }
-                ]
-              },
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "Motivo",
-              "fieldType": "textarea",
-              "placeholder": "Motivo por el cual no podemos aprobarlo",
-              "requiredField": true
-            }
-          ]
-        },
+        "resume": "webhook",
+        "incomingAuthentication": "headerAuth",
+        "httpMethod": "POST",
         "limitWaitTime": true,
         "resumeAmount": 2,
         "resumeUnit": "days",
-        "options": {
-          "appendAttribution": false
-        }
+        "options": {}
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1248,
-        656
+        1232,
+        416
       ],
       "id": "8d02008c-1bd0-4b77-ad74-2e3bce3ac0de",
       "name": "Esperar a RRHH 48 hs",
-      "webhookId": "533520e4-e14e-4139-b886-acfde9c2cce1"
+      "webhookId": "533520e4-e14e-4139-b886-acfde9c2cce1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "VVqemsU5OBB3OA9N",
+          "name": "Header Auth Secret"
+        }
+      }
     },
     {
       "parameters": {
@@ -297,11 +276,12 @@
           "conditions": [
             {
               "id": "eca95a0b-d398-4625-acaa-d6f7c5a17f56",
-              "leftValue": "={{ $json['¿Aprobar o rechazar?'] }}",
+              "leftValue": "={{ $json.data.approve }}",
               "rightValue": "=Aprobar",
               "operator": {
-                "type": "string",
-                "operation": "equals"
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
               }
             }
           ],
@@ -321,7 +301,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "={\n  \"ok\": false,\n  \"message\": \"{{ $json.Motivo }}.\"\n}\n",
+        "jsonOutput": "={\n  \"ok\": false,\n  \"message\": \"{{ $json.data.message || 'No hay mensaje de RRHH' }}\"\n}\n",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -575,7 +555,7 @@
           "conditions": [
             {
               "id": "b70373bf-a6c1-4c40-a3ba-fdf55d5f41b5",
-              "leftValue": "={{ $json.leaveType }}",
+              "leftValue": "={{ $('Webhook - POST - Solicitar vacaciones').item.json.body['Vacaciones / Parte Médico'] }}",
               "rightValue": "Vacaciones",
               "operator": {
                 "type": "string",
@@ -1043,6 +1023,90 @@
       "typeVersion": 1,
       "id": "6db53aae-1761-414c-af57-ebe00bdc9b59",
       "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "             Aviso de parametros incorrectos\n",
+        "height": 224,
+        "width": 464
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        960,
+        912
+      ],
+      "typeVersion": 1,
+      "id": "07c73cbf-cd8d-4e2d-b0bc-d8a0973624d6",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "jsCode": "const src = $input.first().json.body;\n\nconst errors = [];\n\n// Helpers\nconst getStr   = (v) => (v ?? '').toString().trim();\nconst getBool = (v) => {\n  const val = getStr(v).toLowerCase();\n  return val === 'true' || val === '1' || val === 'yes';\n};\n\n// Extract and normalize\nconst message = getStr(src['message']);\nconst approve = getBool(src['approve']);\n\n// Validations\nif (approve === null || approve === undefined || getStr(src['approve']) === '')\n  errors.push('El valor de aprobación es requerido.');\n\nif (!approve) {\n  if (!message) errors.push('El mensaje es requerido cuando se desaprueba.');\n}\n\n// Response for chaining with Webhook Response\nif (errors.length) {\n  return [\n    {\n      valid: false,\n      status: 400,\n      errors,\n    },\n  ];\n}\n\nreturn [\n  {\n    valid: true,\n    status: 200,\n    data: {\n      message,\n      approve,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        672
+      ],
+      "id": "5c2f74e6-37fb-4223-987f-ca5a826037ac",
+      "name": "Validación de los parametros"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3a879355-0f9e-498a-8e81-b9c15a5a75a6",
+              "leftValue": "={{ $json.data.approve }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1232,
+        672
+      ],
+      "id": "85bc5cec-ced8-49cd-b377-4c4d98b360e7",
+      "name": "¿Parametros correctos?"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=## ERROR: en los parametros de respuesta  \nEmpleado: {{ $('Extraer variables de la solicitud').item.json.fullName }}\nEmail: {{ $('Extraer variables de la solicitud').item.json.email }}\n\nFecha de inicio: {{ $('Extraer variables de la solicitud').item.json.startDate }}\n\nFecha de retorno: {{ $('Extraer variables de la solicitud').item.json.endDate }}\n\n\n### Comentarios: {{ $('Extraer variables de la solicitud').item.json.comments }}\n\n## Mensaje de error: {{ $('Validación de los parametros').item.json.data.message }}\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        976
+      ],
+      "id": "b539c003-bb8a-452a-ba3b-21b3ceefbcf1",
+      "name": "Aviso a RRHH",
+      "webhookId": "98132009-788f-4d98-a5e4-4a9e54bd2f0a",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "HWg9Lt4awUYpwpjC",
+          "name": "Discord - RRHH Webhook"
+        }
+      }
     }
   ],
   "connections": {
@@ -1159,7 +1223,7 @@
       "main": [
         [
           {
-            "node": "¿RRHH aprueba la solicitud?",
+            "node": "Validación de los parametros",
             "type": "main",
             "index": 0
           }
@@ -1393,6 +1457,35 @@
         [
           {
             "node": "¿Contiene los campos necesarios?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validación de los parametros": {
+      "main": [
+        [
+          {
+            "node": "¿Parametros correctos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Parametros correctos?": {
+      "main": [
+        [
+          {
+            "node": "¿RRHH aprueba la solicitud?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aviso a RRHH",
             "type": "main",
             "index": 0
           }
