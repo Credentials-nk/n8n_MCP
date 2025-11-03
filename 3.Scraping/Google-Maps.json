@@ -1,0 +1,849 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "id": "1edbf43a-5d73-41af-8f24-97931195045e",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -1648,
+        304
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "de704919-205a-470f-a417-b297fbbdbaf8",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "SUCCEEDED"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "bd4b38f7-5a1b-49a0-97b5-d5a1af5df3dd",
+      "name": "Loop Until Complete",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -560,
+        304
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0",
+          "mode": "list",
+          "cachedResultName": "Google Maps Scraper - Local",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Query",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "74557488-2ca2-401f-85b6-56dfbea27551",
+      "name": "Read Pending Queries",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -1440,
+        304
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BXKR3SMJIs98W59u",
+          "name": "Google Sheets - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/compass~crawler-google-places/runs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"searchStringsArray\": [\n    \"{{ $json.Query }}\"\n  ],\n  \"locationQuery\": \"{{ $json.Location }}\",\n  \"maxCrawledPlacesPerSearch\": 15,\n  \"language\": \"en\",\n  \"maximumLeadsEnrichmentRecords\": 0,\n  \"maxImages\": 0\n}",
+        "options": {}
+      },
+      "id": "d1375c00-fef8-4b86-b06a-71e26725f068",
+      "name": "Start Apify Scraping Job",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1216,
+        304
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "j0MyTRnkg5oxJblN",
+          "name": "Bearer Auth - Apify"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "245a901d-2ea5-49c9-861b-cb2800b2f93e",
+      "name": "Wait for Job Succeed",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        -992,
+        304
+      ],
+      "webhookId": "97a65079-8ee5-45a2-9de0-afd263bbbe34",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "url": "=https://api.apify.com/v2/actor-runs/{{ $json.data.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "a872d4d2-11ea-45c4-86b2-eefca56c6bd9",
+      "name": "Check Scraping Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -768,
+        240
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "j0MyTRnkg5oxJblN",
+          "name": "Bearer Auth - Apify"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.apify.com/v2/datasets/{{ $json.data.defaultDatasetId }}/items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "a8a4d17c-429d-4fa3-a003-b5b57c5e1045",
+      "name": "Fetch Scraped Results",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -336,
+        304
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "j0MyTRnkg5oxJblN",
+          "name": "Bearer Auth - Apify"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0",
+          "mode": "list",
+          "cachedResultName": "Google Maps Scraper - Local",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1948906848,
+          "mode": "list",
+          "cachedResultName": "Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0/edit#gid=1948906848"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "title": "={{ $json.title }}",
+            "categoryName": "={{ $json.categoryName }}",
+            "address": "={{ $json.address }}",
+            "phone": "={{ $json.phoneUnformatted }}",
+            "website": "={{ $json.website }}",
+            "searchString": "={{ $('Read Pending Queries').item.json.Query }}, {{ $('Read Pending Queries').item.json.Location }}",
+            "status": "={{ $('Check Scraping Status').item.json.data.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "searchString",
+              "displayName": "searchString",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "categoryName",
+              "displayName": "categoryName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "165608b7-1e0e-4469-bbef-be632f89dce0",
+      "name": "Save Business Data",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -112,
+        304
+      ],
+      "typeVersion": 4.6,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BXKR3SMJIs98W59u",
+          "name": "Google Sheets - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "2218f0be-2c48-4a1a-bd21-8bdb67c495a1",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.website }}",
+              "rightValue": ""
+            },
+            {
+              "id": "e81a6ae2-f7c2-43e3-8ef7-235cd6fcb0b9",
+              "leftValue": "={{ $json.website }}\n\n",
+              "rightValue": "instagram.com",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "10f7a79c-4abe-41f1-a291-2fb91d14676a",
+      "name": "Filter Businesses with Websites",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        112,
+        304
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "344c05b9-05ec-4569-8fe8-0d687b428148",
+      "name": "Batch Processing Logic",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        336,
+        304
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.firecrawl.dev/v1/scrape",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"url\": \"{{ $json.website }}\",\n  \"formats\": [\n    \"html\"\n  ]\n}",
+        "options": {}
+      },
+      "id": "0202f1ef-87af-4c25-af14-90965627dd0d",
+      "name": "Scrape Website Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        608,
+        208
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": false,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "3aPvDYUXGNKS0KaK",
+          "name": "Bearer Auth - Firecrawl"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// N8N Code Node - Extract emails, LinkedIn, Facebook, Instagram for single item\nconst item = $input.first();\n\n// Get the text content to search (adjust field names as needed)\nconst textContent = item.json.data.html;\n\n// Initialize result object\nconst result = {\n  website: $('Batch Processing Logic').first().json.website,\n  emails: \"None\",\n  linkedin: \"None\", \n  facebook: \"None\",\n  instagram: \"None\",\n  twitter: \"None\"\n};\n\n// Email extraction regex - matches common email patterns\nconst emailRegex = /\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b/gi;\nconst emails = textContent.match(emailRegex);\n\nif (emails && emails.length > 0) {\n  // Remove duplicates and filter out common non-email matches\n  const uniqueEmails = [...new Set(emails)].filter(email => {\n    const lowerEmail = email.toLowerCase();\n    return !lowerEmail.includes('example.com') && \n           !lowerEmail.includes('test@') &&\n           !lowerEmail.includes('noreply@') &&\n           !lowerEmail.includes('no-reply@') &&\n           lowerEmail.length > 5;\n  });\n  \n  if (uniqueEmails.length > 0) {\n    result.emails = uniqueEmails.length === 1 ? uniqueEmails[0] : uniqueEmails.join(', ');\n  }\n}\n\n// LinkedIn extraction - improved pattern\nconst linkedinRegex = /(?:https?:\\/\\/)?(?:www\\.)?linkedin\\.com\\/(?:in\\/|company\\/|pub\\/)[a-zA-Z0-9\\-._]+\\/?/gi;\nconst linkedinMatches = textContent.match(linkedinRegex);\nif (linkedinMatches && linkedinMatches.length > 0) {\n  const cleanLinkedin = linkedinMatches[0].replace(/^(?:https?:\\/\\/)?(?:www\\.)?/i, 'https://www.');\n  result.linkedin = cleanLinkedin;\n}\n\n// Facebook extraction - improved to match numeric IDs and usernames\nconst facebookRegex = /(?:https?:\\/\\/)?(?:www\\.|m\\.|mobile\\.)?facebook\\.com\\/(?:[^\\/\\s]+\\/)*[^\\/\\s?#]+/gi;\nconst facebookMatches = textContent.match(facebookRegex);\nif (facebookMatches && facebookMatches.length > 0) {\n  const cleanFacebook = facebookMatches[0].replace(/^(?:https?:\\/\\/)?(?:www\\.)?/i, 'https://www.');\n  result.facebook = cleanFacebook;\n}\n\n// Instagram extraction - improved to match various URL formats\nconst instagramRegex = /(?:https?:\\/\\/)?(?:www\\.)?instagram\\.com\\/[a-zA-Z0-9\\-._]+\\/?/gi;\nconst instagramMatches = textContent.match(instagramRegex);\nif (instagramMatches && instagramMatches.length > 0) {\n  const cleanInstagram = instagramMatches[0].replace(/^(?:https?:\\/\\/)?(?:www\\.)?/i, 'https://www.');\n  result.instagram = cleanInstagram;\n}\n\n// Twitter/X extraction - improved to match usernames properly\nconst twitterRegex = /(?:https?:\\/\\/)?(?:www\\.)?(?:twitter\\.com|x\\.com)\\/[a-zA-Z0-9_]+\\/?/gi;\nconst twitterMatches = textContent.match(twitterRegex);\nif (twitterMatches && twitterMatches.length > 0) {\n  const cleanTwitter = twitterMatches[0].replace(/^(?:https?:\\/\\/)?(?:www\\.)?/i, 'https://www.');\n  result.twitter = cleanTwitter;\n}\n\n// Alternative extraction for social handles without full URLs\n// Look for @username patterns for Instagram and Twitter\nif (result.instagram === \"None\") {\n  const igHandleRegex = /@([a-zA-Z0-9._]{1,30})/gi;\n  const igHandles = textContent.match(igHandleRegex);\n  if (igHandles && igHandles.length > 0) {\n    const username = igHandles[0].replace('@', '');\n    if (username.length > 0 && !username.includes(' ')) {\n      result.instagram = `https://www.instagram.com/${username}`;\n    }\n  }\n}\n\n// Look for Twitter handles without full URLs\nif (result.twitter === \"None\") {\n  const twitterHandleRegex = /@([a-zA-Z0-9_]{1,15})/gi;\n  const twitterHandles = textContent.match(twitterHandleRegex);\n  if (twitterHandles && twitterHandles.length > 0) {\n    const username = twitterHandles[0].replace('@', '');\n    if (username.length > 0 && !username.includes(' ')) {\n      result.twitter = `https://www.x.com/${username}`;\n    }\n  }\n}\n\n// Clean up URLs - remove trailing slashes and parameters\n['linkedin', 'facebook', 'instagram', 'twitter'].forEach(platform => {\n  if (result[platform] !== \"None\") {\n    result[platform] = result[platform].split('?')[0].split('#')[0].replace(/\\/$/, '');\n  }\n});\n\nreturn result;"
+      },
+      "id": "c930da1d-eee7-4796-9843-4b84c0928037",
+      "name": "Extract Contact Information",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        832,
+        208
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0",
+          "mode": "list",
+          "cachedResultName": "Google Maps Scraper - Local",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2056137853,
+          "mode": "list",
+          "cachedResultName": "Details",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0/edit#gid=2056137853"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "website": "={{ $json.website }}",
+            "emails": "={{ $json.emails }}",
+            "linkedin": "={{ $json.linkedin }}",
+            "facebook": "={{ $json.facebook }}",
+            "instagram": "={{ $json.instagram }}",
+            "twitter": "={{ $json.twitter }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "emails",
+              "displayName": "emails",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "linkedin",
+              "displayName": "linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "facebook",
+              "displayName": "facebook",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "instagram",
+              "displayName": "instagram",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "twitter",
+              "displayName": "twitter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "f51371f8-27cd-4522-849d-5e37a90d4f93",
+      "name": "Save Contact Details",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        1056,
+        208
+      ],
+      "typeVersion": 4.6,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BXKR3SMJIs98W59u",
+          "name": "Google Sheets - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0",
+          "mode": "list",
+          "cachedResultName": "Google Maps Scraper - Local",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Query",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1465okSkFY-bB1L1Z8FgdtAX55OonrUs7Osyw1NLaDi0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Read Pending Queries').item.json.row_number }}",
+            "Status": "true"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Query",
+              "displayName": "Query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "cc10512f-a3ee-4adc-8b9f-aaa74ebbbf39",
+      "name": "Mark as Processed",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        1280,
+        272
+      ],
+      "typeVersion": 4.6,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BXKR3SMJIs98W59u",
+          "name": "Google Sheets - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 🚀 INITIALIZATION PHASE\n- Triggers every 30 minutes\n- Reads unprocessed records from [Google Sheet](https://docs.google.com/spreadsheets/d/1DHezdcetT0c3Ie1xB3z3jDc5WElsLN87K4J9EQDef9g/edit?usp=sharing)\n- Starts Google Places scraper for restaurants\n- Waits for completion",
+        "height": 180,
+        "width": 640,
+        "color": 4
+      },
+      "id": "51a06137-a333-426b-b6cd-22212ee14083",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1632,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 📊 DATA COLLECTION PHASE\n- Monitors scraper job status\n- Loops until job completes\n- Fetches scraped restaurant data\n- Saves to \"Data\" sheet in [Google Sheets](https://docs.google.com/spreadsheets/d/1DHezdcetT0c3Ie1xB3z3jDc5WElsLN87K4J9EQDef9g/edit?usp=sharing)",
+        "height": 180,
+        "width": 660
+      },
+      "id": "0738fcb9-b6ac-4387-b7e3-62d4704da395",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -720,
+        16
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 🌐 WEBSITE PROCESSING PHASE\n- Filters restaurants with valid websites\n- Loops through each website\n- Scrapes website content with Firecrawl\n- Extracts contact information (emails, social media)\n- Saves to \"Details\" sheet and marks as processed",
+        "height": 200,
+        "width": 740,
+        "color": 6
+      },
+      "id": "37b4889e-0687-42f6-8c6a-4a7cb0a319a4",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        288,
+        -32
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 🔄 LOOPS\n**Status Check Loop**: Continues until scraper job is complete\n**Website Processing Loop**: Processes each restaurant website individually",
+        "height": 120,
+        "width": 580
+      },
+      "id": "04eb5d6c-e633-4721-ab4b-6469f124e245",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        608,
+        512
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read Pending Queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Until Complete": {
+      "main": [
+        [
+          {
+            "node": "Wait for Job Succeed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Scraped Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Pending Queries": {
+      "main": [
+        [
+          {
+            "node": "Start Apify Scraping Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Apify Scraping Job": {
+      "main": [
+        [
+          {
+            "node": "Wait for Job Succeed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Job Succeed": {
+      "main": [
+        [
+          {
+            "node": "Check Scraping Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Scraping Status": {
+      "main": [
+        [
+          {
+            "node": "Loop Until Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Scraped Results": {
+      "main": [
+        [
+          {
+            "node": "Save Business Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Business Data": {
+      "main": [
+        [
+          {
+            "node": "Filter Businesses with Websites",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Businesses with Websites": {
+      "main": [
+        [
+          {
+            "node": "Batch Processing Logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch Processing Logic": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Scrape Website Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape Website Content": {
+      "main": [
+        [
+          {
+            "node": "Extract Contact Information",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Contact Information": {
+      "main": [
+        [
+          {
+            "node": "Save Contact Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Contact Details": {
+      "main": [
+        [
+          {
+            "node": "Mark as Processed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark as Processed": {
+      "main": [
+        [
+          {
+            "node": "Batch Processing Logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
+  }
+}
