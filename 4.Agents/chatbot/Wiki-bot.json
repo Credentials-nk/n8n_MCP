@@ -64,8 +64,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -608,
-        448
+        64,
+        384
       ],
       "typeVersion": 1,
       "id": "8c35afd2-969d-4f65-a7cb-03e7adbf64bd",
@@ -78,8 +78,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -624,
-        592
+        48,
+        528
       ],
       "id": "f82489c5-7ebc-4868-ace4-8f8899c96a70",
       "name": "OpenRouter",
@@ -102,8 +102,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        -448,
-        592
+        224,
+        528
       ],
       "id": "99536648-e17e-4fcf-b08d-8ba6fea33381",
       "name": "OpenAI",
@@ -121,8 +121,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -256,
-        592
+        416,
+        528
       ],
       "id": "3946f4c6-c885-43bb-b17a-55f51b1d20f6",
       "name": "Gemini",
@@ -135,16 +135,23 @@
     },
     {
       "parameters": {
+        "model": "gpt-oss:latest",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
         80,
-        208
+        224
       ],
       "id": "fb7385be-4d44-4b87-abe8-420dc8a399aa",
-      "name": "Ollama Chat Model"
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "9J2CB4DTM5VdqDzh",
+          "name": "Ollama - dev-sma"
+        }
+      }
     }
   ],
   "connections": {
