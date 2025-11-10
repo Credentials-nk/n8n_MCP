@@ -1,40 +1,55 @@
-# 🤖 Asistente-bot — Chatbot para agendar eventos en el calendario
-
-
+# 🗓️ Asistente Personal — Gestión inteligente de calendario y correos
 
 ## 📌 ¿Qué resuelve?
-Un asistente personal que resuelve la necesidad puntual de agendar eventos al calendario 
-si hay disponibilidad. Este flujo permite conectar cualquiera de los modelos de lenguaje.
-
+Asistente AI que administra calendario (Google Calendar) y correos (Gmail) con confirmación previa. Crea/consulta eventos respetando horario laboral, lee/redacta/envía emails en HTML con borradores de previsualización, y clasifica por prioridad. Recuerda contexto conversacional.
 
 ## 🔁 Flujo breve
-1) Trigger (chat público/webhook) → mensaje del usuario
-2) AI Agent procesa con memoria de ventana (últimos 10 mensajes)
-3) Una vez que procesa el requerimiento del usuario genera el correo en formato HTML
-4) Por último le muestra la vista previa al usuario para confirmar el envio
-    - ¿Quieres que envíe este correo a example@mail.com?
-5) Si el usuario acepta se realiza el envio 
-
+1) Trigger (chat/webhook) → mensaje del usuario
+2) AI Agent procesa con memoria (10 mensajes) y decide qué tool usar
+3) **Calendario**: consulta disponibilidad → crea/modifica eventos (8am-4pm, L-V, sin traslapes)
+4) **Correo**: lee emails → crea borrador HTML → muestra preview → confirma → envía
+5) Responde con resumen de la acción realizada
 
 ## ⚡ Partes "sheites" (lo clave)
-- Agente con herramientas: usa Gmail tool 
-- Memoria conversacional: BufferWindow de 10 mensajes mantiene coherencia en la charla
-- System prompt diseñado: procese el mensaje y lo retorne en formato HTML
-- Multiproveedor LLM: conecta Ollama (local), OpenAI, Gemini u OpenRouter 
+- Agente multi-tool: 5 herramientas (2 Calendar + 3 Gmail) orquestadas por el LLM según necesidad
+- System prompt avanzado: reglas de horario laboral, anti-traslape, confirmación obligatoria, clasificación de correos, fecha dinámica ($now)
+- Flujo de confirmación: crea borradores HTML antes de enviar (previene errores)
+- Memoria conversacional: BufferWindow mantiene coherencia en solicitudes multi-paso
+- Multiproveedor LLM: Ollama (activo) o Gemini sin cambiar lógica
 
-
-## 📑 Arquitectura mínima
-- Nodos:
-    - Chat Trigger (Webhook público): entry point
-    - AI Agent: orquesta LLM + tool + memoria
-    - Ollama (chat model)
-    - Memory (BufferWindow): guarda últimos 10 mensajes
-    - Gmail Tool: envio de correo 
-
-
+## 📑 Arquitectura (6 nodos + tools)
+- **Trigger**: Chat Trigger (webhook)
+- **Agente**: AI Agent (orquesta LLM + memoria + tools)
+- **LLM**: Ollama (gpt-oss) activo; Gemini opcional
+- **Memoria**: BufferWindow (10 mensajes)
+- **Tools Calendario**:
+  - Obtener eventos (consultar disponibilidad)
+  - Crear eventos (con validaciones horario/traslapes)
+- **Tools Gmail**:
+  - Obtener correos (lee últimos 2 por defecto)
+  - Crear borrador (HTML)
+  - Enviar correo (tras confirmación)
 
 ## 🚀 Uso rápido
-1) Importa `Asistente-personal.json` en n8n y configura credenciales del LLM.
-2) Configura la credencial del nodo de Gmail.
-3) Chatea: "Envia un correo para example@mail.com para recordarle que el almacenamiento del servidor de desarrollo debe ser extendido con prioridad.".
-4) Envio: darle el okey al chat para que envie el mensaje propuesto por email.
+1) Importa `workflow.json` y configura credenciales (Ollama/Gemini + Gmail OAuth + Google Calendar).
+2) Chatea ejemplos:
+   - **Calendario**: "Agenda reunión con equipo mañana a las 10am por 1 hora"
+   - **Correo**: "Envía email a juan@ejemplo.com recordando fecha límite del proyecto"
+3) El agente confirmará antes de crear eventos o enviar correos.
+
+## 🔒 Reglas de negocio (en system prompt)
+- **Horario**: solo 8am-4pm, Lunes a Viernes
+- **Anti-traslape**: verifica disponibilidad antes de agendar
+- **Confirmación**: siempre pide OK antes de crear/modificar/eliminar/enviar
+- **Correos**: borrador HTML primero, firma "Sistemas - Bot"
+- **Clasificación**: prioridad Alta/Media/Baja; ignora spam/promos
+- **Recordatorios**: 15min antes de eventos
+- **Resúmenes**: eventos diarios al inicio del día, semanales los lunes
+
+## 🔧 Personalización
+- Cambiar horario laboral: editar system prompt → "Horario laboral: X a Y"
+- Cambiar calendario: en tool "Crear eventos" → seleccionar otro calendar
+- Cambiar LLM: conectar/desconectar Ollama o Gemini
+- Ajustar memoria: modificar `contextWindowLength` en Memory node
+- Límite de correos: en "Obtener los correos" → ajustar `limit`
+
