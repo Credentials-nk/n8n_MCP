@@ -56,7 +56,7 @@
       "typeVersion": 2.1,
       "position": [
         704,
-        256
+        512
       ],
       "id": "c16e28a0-35a2-4535-adfc-417b3ac5994a",
       "name": "Enviar un correo",
@@ -66,7 +66,8 @@
           "id": "jG503Egv0gBIaG41",
           "name": "Gmail account - nikolas090189@gmail.com"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -121,7 +122,7 @@
       "typeVersion": 2.1,
       "position": [
         544,
-        256
+        512
       ],
       "id": "e254a2b7-04d2-435f-bbef-b0badc99549c",
       "name": "Crear un borrador",
@@ -131,7 +132,8 @@
           "id": "jG503Egv0gBIaG41",
           "name": "Gmail account - nikolas090189@gmail.com"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -143,7 +145,7 @@
       "typeVersion": 2.1,
       "position": [
         368,
-        256
+        512
       ],
       "id": "cae8015e-f1ad-44f1-85df-5d91c8c4de48",
       "name": "Obtener los correos",
@@ -153,7 +155,8 @@
           "id": "jG503Egv0gBIaG41",
           "name": "Gmail account - nikolas090189@gmail.com"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -257,7 +260,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         368,
-        416
+        672
       ],
       "typeVersion": 1,
       "id": "26ef25d2-2691-4936-9612-187637a1de33",
@@ -305,6 +308,20 @@
       ],
       "id": "e7d7b9e0-a847-41ad-91d5-70cb0c8a279e",
       "name": "obtener_pokemons"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://n8n.dev.sma.gob.ar/mcp/ce4212b9-e02e-4928-889c-0a08d2f083bb",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        304,
+        256
+      ],
+      "id": "3e2baac4-d3ee-4b41-8b7b-b09de6a0de24",
+      "name": "MCP Gmail Client"
     }
   ],
   "connections": {
@@ -332,13 +349,7 @@
     },
     "Enviar un correo": {
       "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Ollama": {
@@ -359,24 +370,12 @@
     },
     "Crear un borrador": {
       "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Obtener los correos": {
       "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Crear eventos de calendario": {
@@ -402,6 +401,17 @@
       ]
     },
     "obtener_pokemons": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Gmail Client": {
       "ai_tool": [
         [
           {
