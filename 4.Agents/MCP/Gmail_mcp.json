@@ -2,20 +2,6 @@
   "nodes": [
     {
       "parameters": {
-        "path": "ce4212b9-e02e-4928-889c-0a08d2f083bb"
-      },
-      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
-      "typeVersion": 2,
-      "position": [
-        80,
-        -32
-      ],
-      "id": "a8732a21-1d66-4a9e-a500-972ee068d876",
-      "name": "MCP Server Trigger",
-      "webhookId": "ce4212b9-e02e-4928-889c-0a08d2f083bb"
-    },
-    {
-      "parameters": {
         "content": "## Herramientas de Gmail",
         "height": 80,
         "width": 576,
@@ -23,8 +9,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -48,
-        384
+        -96,
+        352
       ],
       "typeVersion": 1,
       "id": "133a1383-c8a4-44af-b31b-073b0733e89c",
@@ -40,7 +26,7 @@
       "typeVersion": 2.1,
       "position": [
         -48,
-        224
+        192
       ],
       "id": "3286cc05-4fcb-43dd-adfb-d247d53a1774",
       "name": "obtener_correos",
@@ -65,8 +51,8 @@
       "type": "n8n-nodes-base.gmailTool",
       "typeVersion": 2.1,
       "position": [
-        128,
-        224
+        80,
+        192
       ],
       "id": "353498c2-a08f-47ec-859b-dcda23431bc1",
       "name": "crear_borrador",
@@ -91,8 +77,8 @@
       "type": "n8n-nodes-base.gmailTool",
       "typeVersion": 2.1,
       "position": [
-        288,
-        224
+        208,
+        192
       ],
       "id": "fec823ba-2f3e-4057-bb22-acfadb259123",
       "name": "enviar_correo",
@@ -112,8 +98,8 @@
       "type": "n8n-nodes-base.gmailTool",
       "typeVersion": 2.1,
       "position": [
-        448,
-        224
+        336,
+        192
       ],
       "id": "d9a547fb-eb15-44a5-a3c2-d38163b03ca0",
       "name": "marcar_leido_correo",
@@ -124,6 +110,27 @@
           "name": "Gmail account - nikolas090189@gmail.com"
         }
       }
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "path": "nikodev/google-gmail"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        80,
+        -32
+      ],
+      "id": "a8732a21-1d66-4a9e-a500-972ee068d876",
+      "name": "MCP Server Gmail",
+      "webhookId": "ce4212b9-e02e-4928-889c-0a08d2f083bb",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "eLDXFM3lVkMrwfYO",
+          "name": "Header Auth MCP"
+        }
+      }
     }
   ],
   "connections": {
@@ -131,7 +138,7 @@
       "ai_tool": [
         [
           {
-            "node": "MCP Server Trigger",
+            "node": "MCP Server Gmail",
             "type": "ai_tool",
             "index": 0
           }
@@ -142,7 +149,7 @@
       "ai_tool": [
         [
           {
-            "node": "MCP Server Trigger",
+            "node": "MCP Server Gmail",
             "type": "ai_tool",
             "index": 0
           }
@@ -153,7 +160,7 @@
       "ai_tool": [
         [
           {
-            "node": "MCP Server Trigger",
+            "node": "MCP Server Gmail",
             "type": "ai_tool",
             "index": 0
           }
@@ -164,7 +171,7 @@
       "ai_tool": [
         [
           {
-            "node": "MCP Server Trigger",
+            "node": "MCP Server Gmail",
             "type": "ai_tool",
             "index": 0
           }

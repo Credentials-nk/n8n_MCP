@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "n8n-google-gmail": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://n8n.dev.sma.gob.ar/mcp/nikodev/google-gmail",
+        "--header",
+        "mcp-n8n-key: ${AUTH_TOKEN}"
+      ],
+      "env": {
+        "AUTH_TOKEN": "api-key-token-n8n-header-auth"
+      }
+    },
+    "n8n-google-calendar": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://n8n.dev.sma.gob.ar/mcp/nikodev/google-calendar",
+        "--header",
+          "mcp-n8n-key: ${AUTH_TOKEN}"
+      ],
+      "env": {
+        "AUTH_TOKEN": "api-key-token-n8n-header-auth"
+      }
+    }
+  }
+}
