@@ -1,0 +1,102 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "path": "company/metrics/:company-id",
+        "authentication": "jwtAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        1312,
+        272
+      ],
+      "id": "a709534c-f70e-4282-baf3-e9655ace08b0",
+      "name": "Webhook",
+      "webhookId": "afc8b025-1e6a-4878-801b-ca6a75610233",
+      "credentials": {
+        "jwtAuth": {
+          "id": "gpEnyzV3rR2c1N7k",
+          "name": "JWT Auth - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"comapyId\":\"{{ $json.params['company-id'] }}\",\n  \"sales\": 3452231,\n  \"items\": 332125,\n  \"users\": 2332,\n  \"clients\": 3345,\n  \"conversionRate\": 4.7,\n  \"revenue\": 982345.55,\n  \"activeSessions\": 189,\n  \"newUsersToday\": 42,\n  \"topProduct\": {\n    \"id\": \"PRD-9845\",\n    \"name\": \"Wireless Noise-Cancelling Headphones\",\n    \"unitsSold\": 14231,\n    \"revenue\": 213456.78\n  },\n  \"traffic\": {\n    \"today\": 5432,\n    \"thisWeek\": 38765,\n    \"thisMonth\": 152347\n  },\n  \"lastUpdated\": \"2025-08-27T12:45:00Z\",\n  \"user\": {\n    \"name\": \"{{ $json.jwtPayload.name }}\",\n    \"isAdmin\": {{ $json.jwtPayload.admin }},\n    \"roles\": {{ $json.jwtPayload.roles }}\n  },\n  \"payload\": {{ $json.jwtPayload.toJsonString() }}\n}\n ",
+        "includeOtherFields": "=",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1568,
+        272
+      ],
+      "id": "06f4509c-7cf7-48e0-a04a-68598b833414",
+      "name": "Retornar información"
+    },
+    {
+      "parameters": {
+        "content": "# ¿Qué tipo de autenticación debo usar?\n\n### ¿El servicio externo ya soporta un método de autenticación específico?\n- **Sí** → Usa el que soporten.\n- **No** → Sigue leyendo.\n\n### ¿Necesitas acceso con tiempo limitado o metadatos del usuario?\n- **Sí** → Usa **JWT**.\n- **No** → Sigue leyendo.\n\n### ¿Estás usando una API key o token simple?\n- **Sí** → Usa **Header Auth**.\n- **No** → Sigue leyendo.\n\n### ¿El servicio soporta HTTP Basic Auth estándar?\n- **Sí** → Usa **Basic Auth**.\n- **No** → Usa **Header Auth** (más flexible).\n\n---\n\n## Ejemplos del mundo real:\n\n- **Basic Auth:**  \n  Conexión a sistemas empresariales como **Jira**, **Jenkins**, o sistemas **CRM** antiguos.\n\n- **Header Auth:**  \n  Integración con APIs modernas como **Slack**, **Discord**, o aplicaciones personalizadas que usan API keys.\n\n- **JWT:**  \n  Creación de **microservicios**, **backends de apps móviles**, o sistemas que requieren **permisos específicos por usuario**.\n\n\n\n\nEsta lista de puntos fue idea de: [Nate Herk | AI Automation](https://www.youtube.com/watch?v=3FfCRbq3XMs)\n",
+        "height": 880,
+        "width": 720,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        544,
+        -32
+      ],
+      "id": "efe9c9bd-fbb3-4214-af93-c060722e3245",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1808,
+        272
+      ],
+      "id": "85475d09-35c0-4e82-9396-7108e0474cd2",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Retornar información",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retornar información": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
+  }
+}
