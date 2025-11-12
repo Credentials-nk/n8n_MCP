@@ -1,0 +1,731 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Alimentar BD",
+        "height": 576,
+        "width": 592,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -432,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "ec56c567-23ab-43a0-bebc-1c2fda29f7a4",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Consumir BD",
+        "height": 576,
+        "width": 688,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        192,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "6691a137-8f28-4888-9b9c-bb7f21b22c08",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "value": "vector_store_key",
+          "mode": "list",
+          "cachedResultName": "vector_store_key"
+        },
+        "embeddingBatchSize": 250
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        -560
+      ],
+      "id": "96e4d981-fc74-4eac-b090-396146a1c585",
+      "name": "Simple Vector Store",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        -128,
+        -128
+      ],
+      "id": "c338d110-5dfe-4559-a2d4-a3bd60d75ee1",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "model": "mxbai-embed-large:latest"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        176,
+        544
+      ],
+      "id": "0e9e84ac-5e08-4ab7-af9f-ca8ee8c47c7a",
+      "name": "Embeddings Ollama",
+      "credentials": {
+        "ollamaApi": {
+          "id": "9J2CB4DTM5VdqDzh",
+          "name": "Ollama - dev-sma"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "# Rol: Asistente Legal\n\n## Descripción\nEres un asistente legal diseñado para ayudar a un abogado a consultar información contenida en documentos legales internos.  \nDebes recuperar, analizar y entregar respuestas precisas, claras y fundamentadas basadas únicamente en los documentos disponibles.  \nMantén siempre un tono profesional y formal, y prioriza la exactitud legal en todas tus respuestas.  \n\nTus respuestas deben de ser cortas y puntuales.\n\nSi no conoces la respuesta, responde que no dispones de la información.\n\n\n\n## Capacidades\n- Búsqueda y recuperación de información legal relevante.  \n- Respuestas concisas y con fundamento en los documentos disponibles.  \n- Inclusión de referencia del documento utilizado para responder.  \n- Identificación de ausencia de información en los documentos.  \n- Mantener confidencialidad y precisión en todas las respuestas.  \n\n\n## Comportamiento\n1. Recepción de la consulta: Recibe la pregunta o solicitud del abogado.  \n2. Búsqueda de información en la base de conocimiento para encontrar información relevante en los documentos.  \n3. Generación de la respuesta:  \n   - Si encuentras la información:  \n     - Proporciona un resumen conciso, claro y preciso.  \n     - Incluye la referencia del documento donde encontraste la información (nombre o identificación del documento y sección/cláusula si aplica).  \n   - Si no encuentras la información:  \n     - Responde únicamente con:  \n       ```\n       No puedo encontrar la respuesta en los recursos disponibles.\n       ```\n4. Confidencialidad: No reveles información fuera de lo que esté contenido en los documentos.  \n5. Tono: Profesional, formal, claro y directo.  \n\n## Ejemplo\nPregunta del abogado:  \n> ¿Cuál es el procedimiento de terminación anticipada del contrato de arrendamiento?\n\nRespuesta del asistente (ejemplo):  \n> Según el Contrato de Arrendamiento - Cláusula 12, el contrato puede ser terminado anticipadamente por cualquiera de las partes notificando con al menos 30 días de antelación y cumpliendo con el pago proporcional de las obligaciones pendientes.  \n> Referencia: Contrato_Arrendamiento_2025.pdf, Cláusula 12.  "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        512,
+        -144
+      ],
+      "id": "fcddaacd-8001-4681-b711-bbd593010b67",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Aqui puedes tomar los documentos como base de información",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        288,
+        -544
+      ],
+      "id": "17343cc4-c22c-43d4-95fd-8f7076e05438",
+      "name": "Simple Vector Store1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Selección de archivos",
+        "height": 576,
+        "width": 1760,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2224,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "b9947375-533f-4d88-906d-b9496128e583",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "description": "Aqui puedes tomar los documentos como base de información"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        64
+      ],
+      "id": "3e57c4bd-78d1-4993-bc63-8f6f14b2d75f",
+      "name": "Answer questions with a vector store"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -400,
+        -560
+      ],
+      "id": "46c4fec9-8a0a-4599-bed9-5146eed7f719",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "XANZWuAf1hGmT0lr",
+          "name": "Supabase - SSL"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        560,
+        -544
+      ],
+      "id": "1ac51eab-1792-4637-9bb6-798181ab83a0",
+      "name": "Supabase Vector Store2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "XANZWuAf1hGmT0lr",
+          "name": "Supabase - SSL"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Alternativa para el store de datos\n",
+        "height": 240,
+        "width": 3072
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2224,
+        -624
+      ],
+      "typeVersion": 1,
+      "id": "ca13549d-c67e-462d-9ea1-505f8dd32585",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Embeddings\n",
+        "height": 176,
+        "width": 400,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        16,
+        496
+      ],
+      "typeVersion": 1,
+      "id": "599179c6-fd4a-4b83-9586-a220c1ffe15d",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "formTitle": "Cargar documentos",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Documentos",
+              "fieldType": "file",
+              "acceptFileTypes": ".pdf"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -2160,
+        -544
+      ],
+      "id": "8a692f4a-a188-4324-a54a-d17918095634",
+      "name": "Formulario de carga",
+      "webhookId": "c4fa7f47-7229-43ac-9665-8b3f99b27404"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1.3,
+      "position": [
+        -384,
+        16
+      ],
+      "id": "60508d7f-9bfc-416b-ac91-0e0f9d29efd7",
+      "name": "PGVector Store",
+      "credentials": {
+        "postgres": {
+          "id": "Xc77OJKF47GoFlWI",
+          "name": "Postgres - NeonTech"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-oss:120b-cloud",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        272,
+        160
+      ],
+      "id": "3b3d23f7-6006-45df-973d-cfc62bdb0bf6",
+      "name": "Ollama Chat",
+      "credentials": {
+        "ollamaApi": {
+          "id": "9J2CB4DTM5VdqDzh",
+          "name": "Ollama - dev-sma"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        512,
+        64
+      ],
+      "id": "18415611-e296-48af-af5c-fe5289cdb263",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        240
+      ],
+      "id": "71d2e378-eb2c-4b7c-9caf-275e033fc590",
+      "name": "PGVector Store QS",
+      "credentials": {
+        "postgres": {
+          "id": "Xc77OJKF47GoFlWI",
+          "name": "Postgres - NeonTech"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 250,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        32,
+        160
+      ],
+      "id": "b6dd9031-264b-41fc-aa75-af32841f6eab",
+      "name": "Text Splitter"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        272,
+        -144
+      ],
+      "id": "9ddc5a0e-9c6b-4340-8139-5fbd75f1757a",
+      "name": "Chat message",
+      "webhookId": "dc3673e6-5054-4a69-abbf-e1d4e1fbefc3"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1H6U1X6_dNuDwA98TK2X_sQle1udxoKv_",
+          "mode": "list",
+          "cachedResultName": "Documentos Legales",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1H6U1X6_dNuDwA98TK2X_sQle1udxoKv_"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1888,
+        -544
+      ],
+      "id": "3d82d005-2283-4b1a-b837-b51f97d87a35",
+      "name": "Google Drive - nikolas090189@gmail.com",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "X4XYevTGe3S6LxYF",
+          "name": "Google Drive - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -672,
+        -96
+      ],
+      "id": "1d0ba84b-2de1-45ed-b2e1-043dc2f4b218",
+      "name": "Descargar Archivo",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "X4XYevTGe3S6LxYF",
+          "name": "Google Drive - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2160,
+        176
+      ],
+      "id": "dbcf8e68-76b2-42fe-8744-6fec1b267735",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2160,
+        -96
+      ],
+      "id": "76d86b31-b95a-4dfc-8d6a-b0b8a0f540a3",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1H6U1X6_dNuDwA98TK2X_sQle1udxoKv_",
+            "mode": "list",
+            "cachedResultName": "Documentos Legales",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1H6U1X6_dNuDwA98TK2X_sQle1udxoKv_"
+          }
+        },
+        "options": {
+          "fields": [
+            "*"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1904,
+        48
+      ],
+      "id": "fad45ab8-e079-4ff5-93b6-fe56d287de37",
+      "name": "Buscar archivos / directorios",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "X4XYevTGe3S6LxYF",
+          "name": "Google Drive - nikolas090189@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b23f8a26-490b-405d-b6aa-651c9fd5a62a",
+              "leftValue": "={{ $json.mimeType }}",
+              "rightValue": "application/vnd.google-apps.folder",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1616,
+        48
+      ],
+      "id": "c1806759-0509-4627-9bf2-529006511ea0",
+      "name": "¿Es un archivo?"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1456,
+        176
+      ],
+      "id": "d38fe999-84aa-4256-b935-9d06ed417e5f",
+      "name": "Extraer los archivos dentro de los directorios",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "X4XYevTGe3S6LxYF",
+          "name": "Google Drive - nikolas090189@gmail.com"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Simple Vector Store": {
+      "main": [
+        []
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "PGVector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Ollama": {
+      "ai_embedding": [
+        [
+          {
+            "node": "PGVector Store",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "PGVector Store QS",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Vector Store1": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Answer questions with a vector store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store2": {
+      "ai_vectorStore": [
+        []
+      ]
+    },
+    "Formulario de carga": {
+      "main": [
+        []
+      ]
+    },
+    "Ollama Chat": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PGVector Store QS": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat message": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive - nikolas090189@gmail.com": {
+      "main": [
+        []
+      ]
+    },
+    "Descargar Archivo": {
+      "main": [
+        [
+          {
+            "node": "PGVector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Buscar archivos / directorios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Buscar archivos / directorios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar archivos / directorios": {
+      "main": [
+        [
+          {
+            "node": "¿Es un archivo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es un archivo?": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "Extraer los archivos dentro de los directorios": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
+  }
+}
