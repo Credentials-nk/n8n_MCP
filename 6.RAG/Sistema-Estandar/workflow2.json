@@ -47,7 +47,7 @@
       "typeVersion": 1.3,
       "position": [
         -80,
-        -560
+        -704
       ],
       "id": "96e4d981-fc74-4eac-b090-396146a1c585",
       "name": "Simple Vector Store",
@@ -62,8 +62,8 @@
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "typeVersion": 1.1,
       "position": [
-        -128,
-        -128
+        -96,
+        -112
       ],
       "id": "c338d110-5dfe-4559-a2d4-a3bd60d75ee1",
       "name": "Default Data Loader"
@@ -116,7 +116,7 @@
       "typeVersion": 1.3,
       "position": [
         288,
-        -544
+        -688
       ],
       "id": "17343cc4-c22c-43d4-95fd-8f7076e05438",
       "name": "Simple Vector Store1",
@@ -125,13 +125,13 @@
     {
       "parameters": {
         "content": "## Selección de archivos",
-        "height": 576,
-        "width": 1760,
+        "height": 624,
+        "width": 2208,
         "color": 5
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -2224,
+        -2672,
         -208
       ],
       "typeVersion": 1,
@@ -166,7 +166,7 @@
       "typeVersion": 1.3,
       "position": [
         -400,
-        -560
+        -704
       ],
       "id": "46c4fec9-8a0a-4599-bed9-5146eed7f719",
       "name": "Supabase Vector Store",
@@ -192,7 +192,7 @@
       "typeVersion": 1.3,
       "position": [
         560,
-        -544
+        -688
       ],
       "id": "1ac51eab-1792-4637-9bb6-798181ab83a0",
       "name": "Supabase Vector Store2",
@@ -208,12 +208,12 @@
       "parameters": {
         "content": "## Alternativa para el store de datos\n",
         "height": 240,
-        "width": 3072
+        "width": 1328
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -2224,
-        -624
+        -448,
+        -768
       ],
       "typeVersion": 1,
       "id": "ca13549d-c67e-462d-9ea1-505f8dd32585",
@@ -252,12 +252,13 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.3,
       "position": [
-        -2160,
-        -544
+        -2592,
+        -704
       ],
       "id": "8a692f4a-a188-4324-a54a-d17918095634",
       "name": "Formulario de carga",
-      "webhookId": "c4fa7f47-7229-43ac-9665-8b3f99b27404"
+      "webhookId": "c4fa7f47-7229-43ac-9665-8b3f99b27404",
+      "disabled": true
     },
     {
       "parameters": {
@@ -267,8 +268,8 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
       "typeVersion": 1.3,
       "position": [
-        -384,
-        16
+        -400,
+        -16
       ],
       "id": "60508d7f-9bfc-416b-ac91-0e0f9d29efd7",
       "name": "PGVector Store",
@@ -340,7 +341,7 @@
       "typeVersion": 1,
       "position": [
         32,
-        160
+        48
       ],
       "id": "b6dd9031-264b-41fc-aa75-af32841f6eab",
       "name": "Text Splitter"
@@ -382,8 +383,8 @@
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        -1888,
-        -544
+        -2320,
+        -704
       ],
       "id": "3d82d005-2283-4b1a-b837-b51f97d87a35",
       "name": "Google Drive - nikolas090189@gmail.com",
@@ -392,14 +393,15 @@
           "id": "X4XYevTGe3S6LxYF",
           "name": "Google Drive - nikolas090189@gmail.com"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
         "operation": "download",
         "fileId": {
           "__rl": true,
-          "value": "={{ $json.id }}",
+          "value": "={{ $json.file_id }}",
           "mode": "id"
         },
         "options": {}
@@ -408,7 +410,7 @@
       "typeVersion": 3,
       "position": [
         -672,
-        -96
+        32
       ],
       "id": "1d0ba84b-2de1-45ed-b2e1-043dc2f4b218",
       "name": "Descargar Archivo",
@@ -430,7 +432,7 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        -2160,
+        -2592,
         176
       ],
       "id": "dbcf8e68-76b2-42fe-8744-6fec1b267735",
@@ -441,7 +443,7 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -2160,
+        -2592,
         -96
       ],
       "id": "76d86b31-b95a-4dfc-8d6a-b0b8a0f540a3",
@@ -450,6 +452,7 @@
     {
       "parameters": {
         "resource": "fileFolder",
+        "searchMethod": "query",
         "returnAll": true,
         "filter": {
           "folderId": {
@@ -469,7 +472,7 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -1904,
+        -2368,
         48
       ],
       "id": "fad45ab8-e079-4ff5-93b6-fe56d287de37",
@@ -508,7 +511,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1616,
+        -2144,
         48
       ],
       "id": "c1806759-0509-4627-9bf2-529006511ea0",
@@ -530,7 +533,7 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -1456,
+        -1904,
         176
       ],
       "id": "d38fe999-84aa-4256-b935-9d06ed417e5f",
@@ -541,6 +544,332 @@
           "name": "Google Drive - nikolas090189@gmail.com"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "select count(*) as ingested from public.ingested_files\nwhere file_id = '{{ $json.id }}' and md5_checksum ='{{ $json.md5Checksum }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1856,
+        -128
+      ],
+      "id": "29b5e6bd-3c5d-4e9a-9657-313ff185fafb",
+      "name": "Obtener carga previa",
+      "credentials": {
+        "postgres": {
+          "id": "Xc77OJKF47GoFlWI",
+          "name": "Postgres - NeonTech"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3f2d333d-fc62-474e-8005-7a9b2078a067",
+              "leftValue": "={{ $json.ingested }}",
+              "rightValue": "0",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1616,
+        -128
+      ],
+      "id": "1d4d3c70-0472-46cd-b08a-60b6010c8c80",
+      "name": "¿Fue previamente cargado?"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1344,
+        -400
+      ],
+      "id": "3cd022b4-9e47-4878-aea2-8ba0a0e74527",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb971b4f-d20e-4f71-899f-8497f9c21268",
+              "name": "id",
+              "value": "={{ $('¿Es un archivo?').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "f4c6d7b9-1b0b-4553-bfdb-15f3d92736ba",
+              "name": "md5Checksum",
+              "value": "={{ $('¿Es un archivo?').item.json.md5Checksum }}",
+              "type": "string"
+            },
+            {
+              "id": "e91c2f0c-d84a-4bff-838c-7adfb1bf3224",
+              "name": "mimeType",
+              "value": "={{ $('¿Es un archivo?').item.json.mimeType }}",
+              "type": "string"
+            },
+            {
+              "id": "5266f008-af2e-42cb-b235-bc641a44ca6f",
+              "name": "modifiedTime",
+              "value": "={{ $('¿Es un archivo?').item.json.modifiedTime }}",
+              "type": "string"
+            },
+            {
+              "id": "efd5f655-7523-46c2-a202-366353bf56e9",
+              "name": "name",
+              "value": "={{ $('¿Es un archivo?').item.json.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1392,
+        -112
+      ],
+      "id": "0378444a-106a-45c3-9c3c-7a11a1434d1b",
+      "name": "Extraer variables"
+    },
+    {
+      "parameters": {
+        "content": "## Alternativa para el store de datos\n",
+        "height": 240,
+        "width": 592
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2656,
+        -768
+      ],
+      "typeVersion": 1,
+      "id": "ced598b1-673a-4833-87b1-31f2059fbf09",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Sale del workflow\n",
+        "height": 240,
+        "width": 960,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1424,
+        -480
+      ],
+      "typeVersion": 1,
+      "id": "8eadd4d4-2083-47a4-82ba-55b9fff3b4a2",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "delete from n8n_vectors where file_id= '{{ $json.id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1200,
+        64
+      ],
+      "id": "610f44af-388a-429c-9560-d2943cafbcd5",
+      "name": "Borrar referencias",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "Xc77OJKF47GoFlWI",
+          "name": "Postgres - NeonTech"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "ingested_files",
+          "mode": "list",
+          "cachedResultName": "ingested_files"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "file_id": "={{ $json.id }} ",
+            "name": "={{ $json.name  }}",
+            "mime_type": "={{ $json.mimeType  }}",
+            "md5_checksum": "={{ $json.md5Checksum  }}",
+            "modified_time": "={{ $json.modifiedTime }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "file_id",
+              "displayName": "file_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mime_type",
+              "displayName": "mime_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "md5_checksum",
+              "displayName": "md5_checksum",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "modified_time",
+              "displayName": "modified_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_ingested",
+              "displayName": "last_ingested",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -688,
+        -160
+      ],
+      "id": "bcfa8303-11b8-4f66-b7b4-79a15dcb5ed7",
+      "name": "Insertar documento",
+      "alwaysOutputData": false,
+      "credentials": {
+        "postgres": {
+          "id": "Xc77OJKF47GoFlWI",
+          "name": "Postgres - NeonTech"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE n8n_vectors\nSET file_id = '{{ $('Extraer variables').item.json.id }}'\nWHERE metadata->'loc'->'lines' = '{{ $json.metadata.loc.lines.toJsonString() }}' and file_id is null",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -656,
+        224
+      ],
+      "id": "9fdeff57-262c-4152-b516-b652ea9ea336",
+      "name": "Actualizar file_id en vectores",
+      "credentials": {
+        "postgres": {
+          "id": "Xc77OJKF47GoFlWI",
+          "name": "Postgres - NeonTech"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "       ## Sale del workflow\n",
+        "height": 240,
+        "width": 960,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1424,
+        448
+      ],
+      "typeVersion": 1,
+      "id": "4168961d-5118-42a0-9e4e-c0bdb7462bb8",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1360,
+        528
+      ],
+      "id": "b574b545-f0e9-4eee-9466-0e54044f4ffe",
+      "name": "Fin Workflow"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -992,
+        -96
+      ],
+      "id": "b42596ae-aaae-44bf-bc0e-c5f64472ed9c",
+      "name": "Esperar eliminacion"
     }
   ],
   "connections": {
@@ -600,6 +929,17 @@
     "Formulario de carga": {
       "main": [
         []
+      ]
+    },
+    "PGVector Store": {
+      "main": [
+        [
+          {
+            "node": "Actualizar file_id en vectores",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Ollama Chat": {
@@ -713,13 +1053,114 @@
     },
     "¿Es un archivo?": {
       "main": [
-        [],
+        [
+          {
+            "node": "Obtener carga previa",
+            "type": "main",
+            "index": 0
+          }
+        ],
         []
       ]
     },
     "Extraer los archivos dentro de los directorios": {
       "main": [
-        []
+        [
+          {
+            "node": "¿Es un archivo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener carga previa": {
+      "main": [
+        [
+          {
+            "node": "¿Fue previamente cargado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Fue previamente cargado?": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extraer variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer variables": {
+      "main": [
+        [
+          {
+            "node": "Borrar referencias",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Esperar eliminacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Borrar referencias": {
+      "main": [
+        [
+          {
+            "node": "Esperar eliminacion",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Insertar documento": {
+      "main": [
+        [
+          {
+            "node": "Descargar Archivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar file_id en vectores": {
+      "main": [
+        [
+          {
+            "node": "Fin Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Esperar eliminacion": {
+      "main": [
+        [
+          {
+            "node": "Insertar documento",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
