@@ -1,0 +1,283 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://ron-lease-nerve-alternate.trycloudflare.com/orders",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f9f04f6e-ceae-4353-82bb-42614d4f2763",
+      "name": "Obtener Productos",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "path": "my-store-products",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "02147403-8399-469b-a563-b42cb950d67d",
+      "name": "Webhook - Obtener Productos",
+      "webhookId": "1a60ca4c-0fd7-45bc-a1c4-889ec12383c0",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "94NfddLFjzyuO7vE",
+          "name": "Header Auth - 32char"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "5de865dc-08fc-4a9b-b935-7f2d327ec71e",
+      "name": "Respond productos"
+    },
+    {
+      "parameters": {
+        "content": "## get_products\nObtiene productos de mi backend",
+        "height": 272,
+        "width": 704
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -80,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "6dbfbb15-2e28-48ee-b5c5-9c301fa6e4f8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## get_product_by_id\nObtiene informacion del producto",
+        "height": 480,
+        "width": 1216
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        448
+      ],
+      "typeVersion": 1,
+      "id": "2a743dae-6dac-4ec6-95d3-6c3da1b1c64a",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        832,
+        512
+      ],
+      "id": "7c3a7a33-0d3b-4d05-9e06-b4b5a17d0e21",
+      "name": "Respond con la orden"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "my-store-orders",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -32,
+        640
+      ],
+      "id": "e5bdf3ea-b544-4e7b-b0f8-83a7c0eb111b",
+      "name": "Webhook - Obtener Orden por ID",
+      "webhookId": "1a60ca4c-0fd7-45bc-a1c4-889ec12383c0",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "94NfddLFjzyuO7vE",
+          "name": "Header Auth - 32char"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3b6d22bc-a579-4e2b-826d-f0d1f538c210",
+              "leftValue": "={{ $json.body.orderId }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        160,
+        544
+      ],
+      "id": "f76c841e-49e7-4aa0-a3c2-f8a754ab5bd6",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "=https://ron-lease-nerve-alternate.trycloudflare.com/orders/{{ $json.body.orderId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        432,
+        528
+      ],
+      "id": "8618ed70-2fd0-45ec-870a-a58ffb92df22",
+      "name": "Obtener informacion de la orden",
+      "alwaysOutputData": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"ok\": \"false\",\n  \"errors\": \"orderId does not exists\"\n}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        688,
+        752
+      ],
+      "id": "6812f850-ce9b-457a-813a-e238bf4263bd",
+      "name": "OrderId no encontrada"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"ok\": \"false\",\n  \"errors\": \"orderId is requerid\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        288,
+        752
+      ],
+      "id": "05b15c02-9c8d-4f84-93e9-ee6eb03d7065",
+      "name": "OrderId is requerid"
+    }
+  ],
+  "connections": {
+    "Obtener Productos": {
+      "main": [
+        [
+          {
+            "node": "Respond productos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Obtener Productos": {
+      "main": [
+        [
+          {
+            "node": "Obtener Productos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Obtener Orden por ID": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Obtener informacion de la orden",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OrderId is requerid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener informacion de la orden": {
+      "main": [
+        [
+          {
+            "node": "Respond con la orden",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OrderId no encontrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
+  }
+}
