@@ -1,0 +1,670 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -576,
+        160
+      ],
+      "id": "1a0d2032-eedc-4a03-b207-f752dd5a403d",
+      "name": "Telegram Trigger",
+      "webhookId": "88bec10b-65dc-4a6c-ba02-65185c4b324f",
+      "credentials": {
+        "telegramApi": {
+          "id": "xv536P1bbLHaR56f",
+          "name": "Telegram - n8n_devstore_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## /start\nUn usuario se conecta al bot",
+        "height": 288,
+        "width": 1008,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "a46632a7-1c78-422c-a6c6-a9bbacd09649",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "sendSticker",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        384,
+        -160
+      ],
+      "id": "00a9322a-7fb0-4224-be18-3b142ae029ca",
+      "name": "Enviar stiker",
+      "webhookId": "280ead01-91e8-45db-8b34-f4556bd6e42f",
+      "credentials": {
+        "telegramApi": {
+          "id": "xv536P1bbLHaR56f",
+          "name": "Telegram - n8n_devstore_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.giphy.com/v1/stickers/random?api_key=PMzOo3pQkS1enWMtuR7tN7qIcyU6sXDb&tag=hola&rating=pg",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -32,
+        -160
+      ],
+      "id": "d6b37ce1-655d-45e9-b441-284fb7b55126",
+      "name": "Obetener el stiker"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.data.images.original.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        176,
+        -160
+      ],
+      "id": "a3c6d269-b5fd-479e-ac69-bccdc738b9ba",
+      "name": "Descargar stiker"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "/start",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "24a10e94-3602-4047-9ebd-a2e4b161bc06"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "/start"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6626bbc5-0796-4493-abf1-a490a55705ab",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a7857c3d-66b0-4ed7-83d6-588e4248c3b4",
+                    "leftValue": "={{ $json.message.photo }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "array",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image-message"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -368,
+        144
+      ],
+      "id": "6716e5ca-53f6-4037-8cc5-9ace4c6a966f",
+      "name": "¿Que tipo de mensaje es?"
+    },
+    {
+      "parameters": {
+        "content": "## Text Message",
+        "height": 288,
+        "width": 1008,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "4c0137ae-3e0c-4a5b-bf58-9a235accdb1d",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "sendChatAction",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -32,
+        160
+      ],
+      "id": "45f44e22-aabc-4fb8-afd7-33f86e4fe0ab",
+      "name": "Escribiendo",
+      "webhookId": "b84c2896-4243-4014-8d58-9d5cd14c4d52",
+      "credentials": {
+        "telegramApi": {
+          "id": "xv536P1bbLHaR56f",
+          "name": "Telegram - n8n_devstore_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"text\": \"{{ $('Telegram Trigger').item.json.message.text }}\",\n  \"type\": \"message\",\n  \"ai\": \"\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        752,
+        160
+      ],
+      "id": "7de6d6ed-35be-4195-b0c8-5f4da950788a",
+      "name": "Datos del mensaje"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "=## Descripción\n- Eres un asistente que ayuda a las personas con problemas de cultura general\n\n\n- Tus respuestas deben de ser muy cortas, 1 o 2 lineas máximo \n\n- A veces recibirás textos de imágenes previamente analizadas por otro AI, la respuesta no ha sido enviada al usuario, tu labor sería enviarle ese mensaje al usuario.\n\n\n## Información previa de la imagen mediante AI\n{{ $json.ai }}\n\n## Tools\n\"send_telegram\" te permite enviar mensajes de telegram\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1424,
+        96
+      ],
+      "id": "1fc4f894-e0d6-4eb8-abd5-7d23bfc28e0d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "gpt-oss:120b-cloud",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        304
+      ],
+      "id": "1aedac79-1981-4562-bfd1-2bb9235803a5",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "9J2CB4DTM5VdqDzh",
+          "name": "Ollama - dev-sma"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1456,
+        304
+      ],
+      "id": "83e6b0eb-bc85-4c4b-b49f-29481607d20f",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  text: $input.first().json.text,\n  type: $input.first().json.type,\n  ai: $input.first().json.ai\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        160
+      ],
+      "id": "003b2e8b-10da-4926-aa98-c3540c616aa3",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "height": 464,
+        "width": 816,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1056,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "464ca38d-7769-4859-8af9-fc8c220288cd",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegramTool",
+      "typeVersion": 1.2,
+      "position": [
+        1664,
+        288
+      ],
+      "id": "2a2c0f5c-463c-4fe3-b7a6-7585622d4a74",
+      "name": "send_telegram",
+      "webhookId": "2b9e23b8-9591-4cdd-853f-0c65b6e34ebb",
+      "credentials": {
+        "telegramApi": {
+          "id": "xv536P1bbLHaR56f",
+          "name": "Telegram - n8n_devstore_bot"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "reply_to_message_id": "={{ $('Telegram Trigger').item.json.message.message_id }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1968,
+        160
+      ],
+      "id": "baa8b9b5-2c7e-4ae9-a701-f961ffdf442e",
+      "name": "Enviar mensaje de texto",
+      "webhookId": "1d893127-fa22-4b5e-ab89-1eab8e675286",
+      "credentials": {
+        "telegramApi": {
+          "id": "xv536P1bbLHaR56f",
+          "name": "Telegram - n8n_devstore_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Image Message",
+        "height": 288,
+        "width": 1008,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "155de802-754e-4de7-bb3b-d630b6250de8",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $('Telegram Trigger').first().json.message.photo[3] || \n  $('Telegram Trigger').first().json.message.photo[2] ||\n  $('Telegram Trigger').first().json.message.photo[1] ||\n  $('Telegram Trigger').first().json.message.photo[0];\n  "
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        176,
+        480
+      ],
+      "id": "591f7605-d560-4282-b7bb-43a214e17d23",
+      "name": "Seleccionar foto de mayor resolucion"
+    },
+    {
+      "parameters": {
+        "operation": "sendChatAction",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -32,
+        480
+      ],
+      "id": "91dc7e41-eabd-4c48-b1b9-084c964f51f0",
+      "name": "Respondiendo",
+      "webhookId": "b84c2896-4243-4014-8d58-9d5cd14c4d52",
+      "credentials": {
+        "telegramApi": {
+          "id": "xv536P1bbLHaR56f",
+          "name": "Telegram - n8n_devstore_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        368,
+        480
+      ],
+      "id": "980b1574-e99e-4859-8816-70299da937f7",
+      "name": "Descargar foto",
+      "webhookId": "ca1d03c8-02b6-4be9-93c9-6c59acfe4d38",
+      "credentials": {
+        "telegramApi": {
+          "id": "xv536P1bbLHaR56f",
+          "name": "Telegram - n8n_devstore_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "llama3.2-vision:11b",
+          "mode": "list",
+          "cachedResultName": "llama3.2-vision:11b"
+        },
+        "text": "={{ $('Telegram Trigger').item.json.message.caption || '¿Qué hay en la imagen?' }}\n\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.ollama",
+      "typeVersion": 1,
+      "position": [
+        560,
+        480
+      ],
+      "id": "49eacb4b-f950-4324-b063-d10b850969a6",
+      "name": "Analizar imagen",
+      "credentials": {
+        "ollamaApi": {
+          "id": "9J2CB4DTM5VdqDzh",
+          "name": "Ollama - dev-sma"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"text\": \"{{ $('Telegram Trigger').item.json.message.caption || '¿Qué hay en la imagen?' }}\",\n  \"type\": \"message\",\n  \"ai\": {{ $json.content.toJsonString() }}\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        752,
+        480
+      ],
+      "id": "cdacdfa7-d426-493f-8b92-10529ea4e751",
+      "name": "Datos del mensaje1"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "¿Que tipo de mensaje es?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obetener el stiker": {
+      "main": [
+        [
+          {
+            "node": "Descargar stiker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar stiker": {
+      "main": [
+        [
+          {
+            "node": "Enviar stiker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Que tipo de mensaje es?": {
+      "main": [
+        [
+          {
+            "node": "Obetener el stiker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escribiendo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respondiendo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escribiendo": {
+      "main": [
+        [
+          {
+            "node": "Datos del mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos del mensaje": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje de texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send_telegram": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Seleccionar foto de mayor resolucion": {
+      "main": [
+        [
+          {
+            "node": "Descargar foto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respondiendo": {
+      "main": [
+        [
+          {
+            "node": "Seleccionar foto de mayor resolucion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar foto": {
+      "main": [
+        [
+          {
+            "node": "Analizar imagen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analizar imagen": {
+      "main": [
+        [
+          {
+            "node": "Datos del mensaje1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos del mensaje1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
+  }
+}
