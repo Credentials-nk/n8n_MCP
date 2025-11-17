@@ -1,7 +1,7 @@
 # 🤖 Bot de Telegram con IA
 
 ## 📌 ¿Qué resuelve?
-Bot de Telegram que responde mensajes de texto e imágenes usando IA. Ayuda con preguntas de cultura general y análisis de imágenes mediante modelos LLM locales (Ollama).
+Bot de Telegram que responde mensajes de texto, audios e imágenes usando IA. Ayuda con preguntas de cultura general y análisis de imágenes mediante modelos LLM locales (Ollama).
 
 ---
 
@@ -16,12 +16,16 @@ Trigger → Mostrar "escribiendo..." → Procesar con AI Agent → Responder con
 ### 🖼️ **Image Message**
 Trigger → Mostrar "respondiendo..." → Seleccionar foto de mayor resolución → Descargar → Analizar con IA Vision → Enviar respuesta
 
+### 🎤 **Audio Message**
+Trigger → Procesar audio → Transcribir/Analizar → Responder con mensaje de texto
+
 ---
 
 ## ⚡ Partes "sheites"
 
 ### 🧠 **IA multimodal**
 - **Texto**: Usa modelo `gpt-oss:120b-cloud` para respuestas conversacionales
+- **Audio**: Transcribe y procesa mensajes de voz
 - **Imágenes**: Usa modelo `llama3.2-vision:11b` para análisis visual
 - **Memoria**: Mantiene contexto de los últimos 10 mensajes por chat
 
@@ -30,6 +34,7 @@ Detecta automáticamente el tipo de mensaje:
 - Comando `/start` → Envía sticker animado
 - Mensaje de texto → Respuesta conversacional
 - Imagen → Análisis con Vision AI
+- Audio → Transcripción y respuesta
 
 ### 👁️ **Análisis de imágenes**
 - Selecciona la foto de mayor resolución automáticamente
@@ -54,6 +59,7 @@ Usuario → Telegram
 [Bot Trigger] → Switch (tipo de mensaje)
    ├── /start → Giphy API → Sticker
    ├── Texto → Ollama Chat → Respuesta
+   ├── Audio → Transcripción → Ollama Chat → Respuesta
    └── Imagen → Llama Vision → Ollama Chat → Respuesta
 ```
 

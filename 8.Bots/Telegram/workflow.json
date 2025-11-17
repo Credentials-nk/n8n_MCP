@@ -11,7 +11,7 @@
       "typeVersion": 1.2,
       "position": [
         -576,
-        160
+        176
       ],
       "id": "1a0d2032-eedc-4a03-b207-f752dd5a403d",
       "name": "Telegram Trigger",
@@ -28,7 +28,7 @@
         "content": "## /start\nUn usuario se conecta al bot",
         "height": 288,
         "width": 1008,
-        "color": 5
+        "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
@@ -165,6 +165,29 @@
               },
               "renameOutput": true,
               "outputKey": "image-message"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4ab7da63-f2a0-4a86-9a11-ea9cbf2489b0",
+                    "leftValue": "={{ $json.message.voice }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
             }
           ]
         },
@@ -184,7 +207,7 @@
         "content": "## Text Message",
         "height": 288,
         "width": 1008,
-        "color": 5
+        "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
@@ -242,8 +265,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3,
       "position": [
-        1424,
-        96
+        1456,
+        416
       ],
       "id": "1fc4f894-e0d6-4eb8-abd5-7d23bfc28e0d",
       "name": "AI Agent"
@@ -256,8 +279,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
-        1280,
-        304
+        1376,
+        624
       ],
       "id": "1aedac79-1981-4562-bfd1-2bb9235803a5",
       "name": "Ollama Chat Model",
@@ -277,35 +300,22 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        1456,
-        304
+        1552,
+        624
       ],
       "id": "83e6b0eb-bc85-4c4b-b49f-29481607d20f",
       "name": "Simple Memory"
     },
     {
       "parameters": {
-        "jsCode": "return {\n  text: $input.first().json.text,\n  type: $input.first().json.type,\n  ai: $input.first().json.ai\n}"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1104,
-        160
-      ],
-      "id": "003b2e8b-10da-4926-aa98-c3540c616aa3",
-      "name": "Code in JavaScript"
-    },
-    {
-      "parameters": {
-        "height": 464,
+        "height": 480,
         "width": 816,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1056,
-        0
+        1152,
+        320
       ],
       "typeVersion": 1,
       "id": "464ca38d-7769-4859-8af9-fc8c220288cd",
@@ -322,8 +332,8 @@
       "type": "n8n-nodes-base.telegramTool",
       "typeVersion": 1.2,
       "position": [
-        1664,
-        288
+        1728,
+        624
       ],
       "id": "2a2c0f5c-463c-4fe3-b7a6-7585622d4a74",
       "name": "send_telegram",
@@ -348,8 +358,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1968,
-        160
+        2560,
+        608
       ],
       "id": "baa8b9b5-2c7e-4ae9-a701-f961ffdf442e",
       "name": "Enviar mensaje de texto",
@@ -463,7 +473,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "={\n  \"text\": \"{{ $('Telegram Trigger').item.json.message.caption || '¿Qué hay en la imagen?' }}\",\n  \"type\": \"message\",\n  \"ai\": {{ $json.content.toJsonString() }}\n}\n",
+        "jsonOutput": "={\n  \"text\": \"{{ $('Telegram Trigger').item.json.message.caption || '¿Qué hay en la imagen?' }}\",\n  \"type\": \"image\",\n  \"ai\": {{ $json.content.toJsonString() }}\n}\n",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -474,6 +484,245 @@
       ],
       "id": "cdacdfa7-d426-493f-8b92-10529ea4e751",
       "name": "Datos del mensaje1"
+    },
+    {
+      "parameters": {
+        "content": "## Audio Message",
+        "height": 288,
+        "width": 1008,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        736
+      ],
+      "typeVersion": 1,
+      "id": "ce741858-8d04-44c8-ad9b-be6087330932",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "operation": "sendChatAction",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "action": "record_audio"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -32,
+        832
+      ],
+      "id": "bf2274bd-2282-4234-8376-0d91ed852c86",
+      "name": "Grabando audio",
+      "webhookId": "b84c2896-4243-4014-8d58-9d5cd14c4d52",
+      "credentials": {
+        "telegramApi": {
+          "id": "xv536P1bbLHaR56f",
+          "name": "Telegram - n8n_devstore_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        368,
+        832
+      ],
+      "id": "dbb78358-fe01-4df2-925e-173fa28f2f8f",
+      "name": "Descargar audio",
+      "webhookId": "ca1d03c8-02b6-4be9-93c9-6c59acfe4d38",
+      "credentials": {
+        "telegramApi": {
+          "id": "xv536P1bbLHaR56f",
+          "name": "Telegram - n8n_devstore_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        576,
+        832
+      ],
+      "id": "7c6755d2-7703-439c-87cb-b5d753091b8c",
+      "name": "Transcribir audio",
+      "credentials": {
+        "openAiApi": {
+          "id": "mttZxjw5oRqYs0vP",
+          "name": "OpenAi - Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"text\": {{ $json.text.toJsonString() }},\n  \"type\": \"audio\",\n  \"ai\": \"\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        752,
+        832
+      ],
+      "id": "0078f8ed-639b-4476-8238-767614673442",
+      "name": "Datos del mensaje2"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  text: $input.first().json.text,\n  type: $input.first().json.type,\n  ai: $input.first().json.ai\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        480
+      ],
+      "id": "003b2e8b-10da-4926-aa98-c3540c616aa3",
+      "name": "Unir datos"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "input": "={{ $json.output }}",
+        "voice": "echo",
+        "options": {
+          "response_format": "opus"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        112
+      ],
+      "id": "42e7bed1-f597-4395-89ab-3226f137bbf0",
+      "name": "Generate audio",
+      "credentials": {
+        "openAiApi": {
+          "id": "mttZxjw5oRqYs0vP",
+          "name": "OpenAi - Api"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Respuesta al susuario",
+        "height": 464,
+        "width": 480,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2288,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "8e63143b-720c-40eb-817c-3810bd462fa4",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "722b9679-cac0-4692-a8c7-17438c8220a6",
+              "leftValue": "={{ $('Unir datos').item.json.type }}",
+              "rightValue": "audio",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2032,
+        496
+      ],
+      "id": "03c2ed02-3aee-4a9d-9f71-d81fd88ae026",
+      "name": "¿Es audio o mensaje?"
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "tTQzD8U9VSnJgfwC6HbY",
+          "mode": "list",
+          "cachedResultName": "Nathalia"
+        },
+        "text": "={{ $json.output }}",
+        "additionalOptions": {
+          "outputFormat": "opus_48000_32"
+        },
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        2336,
+        400
+      ],
+      "id": "ed629a3b-7b5c-47aa-9f5a-97e73219472b",
+      "name": "Generar texto en audio",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "DCfW7v9EbA9EDYaT",
+          "name": "ElevenLabs - n8n-chat-bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {
+          "reply_to_message_id": "={{ $('Telegram Trigger').item.json.message.message_id }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2560,
+        400
+      ],
+      "id": "62f8cc16-b4e9-4838-8a09-f3c32829306f",
+      "name": "Enviar audio",
+      "webhookId": "2c50d3ef-6010-40e0-827f-e23b53b66c67",
+      "credentials": {
+        "telegramApi": {
+          "id": "xv536P1bbLHaR56f",
+          "name": "Telegram - n8n_devstore_bot"
+        }
+      }
     }
   ],
   "connections": {
@@ -532,6 +781,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Grabando audio",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -550,7 +806,7 @@
       "main": [
         [
           {
-            "node": "Code in JavaScript",
+            "node": "Unir datos",
             "type": "main",
             "index": 0
           }
@@ -561,7 +817,7 @@
       "main": [
         [
           {
-            "node": "Enviar mensaje de texto",
+            "node": "¿Es audio o mensaje?",
             "type": "main",
             "index": 0
           }
@@ -590,20 +846,15 @@
         ]
       ]
     },
-    "Code in JavaScript": {
-      "main": [
+    "send_telegram": {
+      "ai_tool": [
         [
           {
             "node": "AI Agent",
-            "type": "main",
+            "type": "ai_tool",
             "index": 0
           }
         ]
-      ]
-    },
-    "send_telegram": {
-      "ai_tool": [
-        []
       ]
     },
     "Seleccionar foto de mayor resolucion": {
@@ -654,7 +905,96 @@
       "main": [
         [
           {
-            "node": "Code in JavaScript",
+            "node": "Unir datos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Grabando audio": {
+      "main": [
+        [
+          {
+            "node": "Descargar audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar audio": {
+      "main": [
+        [
+          {
+            "node": "Transcribir audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribir audio": {
+      "main": [
+        [
+          {
+            "node": "Datos del mensaje2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos del mensaje2": {
+      "main": [
+        [
+          {
+            "node": "Unir datos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unir datos": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate audio": {
+      "main": [
+        []
+      ]
+    },
+    "¿Es audio o mensaje?": {
+      "main": [
+        [
+          {
+            "node": "Generar texto en audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar mensaje de texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generar texto en audio": {
+      "main": [
+        [
+          {
+            "node": "Enviar audio",
             "type": "main",
             "index": 0
           }
@@ -662,7 +1002,68 @@
       ]
     }
   },
-  "pinData": {},
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "update_id": 962754146,
+        "message": {
+          "message_id": 71,
+          "from": {
+            "id": 6980429438,
+            "is_bot": false,
+            "first_name": "Niko",
+            "language_code": "es"
+          },
+          "chat": {
+            "id": 6980429438,
+            "first_name": "Niko",
+            "type": "private"
+          },
+          "date": 1763378265,
+          "voice": {
+            "duration": 7,
+            "mime_type": "audio/ogg",
+            "file_id": "AwACAgEAAxkBAANHaRsEWHNU2EQSWqUdXaEXQpGwWbEAAokGAAJsrdlEWnebFQ6ZNZs2BA",
+            "file_unique_id": "AgADiQYAAmyt2UQ",
+            "file_size": 149161
+          }
+        }
+      }
+    ],
+    "Grabando audio": [
+      {
+        "ok": true,
+        "result": true
+      }
+    ],
+    "Descargar audio": [
+      {
+        "ok": true,
+        "result": {
+          "file_id": "AwACAgEAAxkBAANHaRsEWHNU2EQSWqUdXaEXQpGwWbEAAokGAAJsrdlEWnebFQ6ZNZs2BA",
+          "file_unique_id": "AgADiQYAAmyt2UQ",
+          "file_size": 149161,
+          "file_path": "voice/file_5.oga"
+        }
+      }
+    ],
+    "Transcribir audio": [
+      {
+        "text": "Bueno, buenas, ¿cómo están? Me gustaría pedir información acerca del cabildo de Buenos Aires.",
+        "usage": {
+          "type": "duration",
+          "seconds": 8
+        }
+      }
+    ],
+    "Datos del mensaje2": [
+      {
+        "text": "Bueno, buenas, ¿cómo están? Me gustaría pedir información acerca del cabildo de Buenos Aires.",
+        "type": "audio",
+        "ai": ""
+      }
+    ]
+  },
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
