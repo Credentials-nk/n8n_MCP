@@ -1,0 +1,525 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        432
+      ],
+      "id": "5fe2c4d2-b89a-4a80-a9a9-8d1906af41ce",
+      "name": "WhatsApp Trigger",
+      "webhookId": "d83fa41f-c548-415f-9429-9248dcba577e",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "F1PYVFqp0CPyrFNY",
+          "name": "WhatsApp Client ID"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const from = $input.first().json.messages[0].from.replace(/\\D/g, '');\n\nconst phoneNumber = from.startsWith('549') \n  ? '54' + from.substring(3, 6) + from.charAt(6) + '15' + from.substring(7)\n  : from;\n\nreturn [{ json: { phoneNumber } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -752,
+        432
+      ],
+      "id": "46fbd670-c884-492b-adbb-92d35fa2ff48",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('WhatsApp Trigger').item.json.messages[0].text.body }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "02a6e753-95aa-427c-92ce-f51a68a85072"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text-message"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1817c6c2-9c6a-40ee-b5bb-7583ad88db09",
+                    "leftValue": "={{ $('WhatsApp Trigger').item.json.messages[0].image }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image-message"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -544,
+        432
+      ],
+      "id": "5f49a1b5-d3f4-4292-859e-62119713394e",
+      "name": "¿Qué tipo de mensaje es?"
+    },
+    {
+      "parameters": {
+        "content": "## Text\n",
+        "height": 272,
+        "width": 768,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -272,
+        96
+      ],
+      "typeVersion": 1,
+      "id": "9e3357e5-134b-4e3b-ba76-9a60460c6742",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {\n  userPrompt: $input.first().json.userPrompt,\n  type: $input.first().json.type,\n  ai: $input.first().json.ai,\n  wa_id: $input.first().json.wa_id,\n  phone: $input.first().json.phone.toString(),\n  \n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        496
+      ],
+      "id": "80ac1873-52b9-4db8-bd1e-cdcb9c04f88a",
+      "name": "Unir datos"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.userPrompt }}",
+        "options": {
+          "systemMessage": "=Eres un asistente que ayuda a las personas con preguntas de conocimiento general.\n\nPuedes recibir información de un AI que analiza la imagen.\n\n## Imagen analizada por AI:\n{{ $json.ai }}\n\n\n## Siempre debes responder en castellano( Español - Latino)"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1056,
+        496
+      ],
+      "id": "0363d229-7195-4a89-937b-935900ab3b3e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.wa_id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1216,
+        688
+      ],
+      "id": "97705b72-3d08-481d-a9cc-05320bceb02d",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "content": "## Image\n",
+        "height": 288,
+        "width": 768,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -272,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "3760ea8e-e9d5-43ce-8e6b-7345723b58c1",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"userPrompt\": {{ $('WhatsApp Trigger').item.json.messages[0].text.body.toJsonString() }},\n  \"type\": {{ $('WhatsApp Trigger').item.json.messages[0].type.toJsonString() }},\n  \"ai\":\"\",\n  \"wa_id\": {{ $('WhatsApp Trigger').item.json.contacts[0].wa_id }},\n  \"phone\": {{ $json.phoneNumber }},\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        32,
+        192
+      ],
+      "id": "8ec1aab1-451b-42c8-80a0-385d0b75daa4",
+      "name": "Extraer mensaje"
+    },
+    {
+      "parameters": {
+        "resource": "media",
+        "operation": "mediaUrlGet",
+        "mediaGetId": "={{ $('WhatsApp Trigger').item.json.messages[0].image.id }}"
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        512
+      ],
+      "id": "f3200789-0d93-481f-b519-fe326e07720a",
+      "name": "Procesar imagen",
+      "webhookId": "10047a79-7e0a-40ca-b0f0-2dffd87aa1bd",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "RJTFi2eMTgWkw8E9",
+          "name": "WhatsApp - Business Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -48,
+        512
+      ],
+      "id": "81672a51-6c03-46e5-b083-798b4636dead",
+      "name": "Descargar imagen",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "dcgZOFPsTUC14plP",
+          "name": "Bearer Auth whatsApp"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "llama3.2-vision:11b",
+          "mode": "list",
+          "cachedResultName": "llama3.2-vision:11b"
+        },
+        "text": "={{ $('WhatsApp Trigger').item.json.messages[0].image.caption.toJsonString() || \"Describe la imagen\" }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.ollama",
+      "typeVersion": 1,
+      "position": [
+        144,
+        416
+      ],
+      "id": "61adae07-869a-49d6-b221-251ac5f7cf3c",
+      "name": "Analyze Ollama",
+      "credentials": {
+        "ollamaApi": {
+          "id": "9J2CB4DTM5VdqDzh",
+          "name": "Ollama - dev-sma"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "text": "{{ $('WhatsApp Trigger').item.json.messages[0].image.caption.toJsonString() || \"Describe la imagen\" }}",
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        144,
+        544
+      ],
+      "id": "cc7daafc-ca69-47c8-afb6-2498807dbc69",
+      "name": "Analyze OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "mttZxjw5oRqYs0vP",
+          "name": "OpenAi - Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"userPrompt\": {{ $('WhatsApp Trigger').item.json.messages[0].image.caption.toJsonString() || \"Describe la imagen.\"}},\n  \"type\": {{ $('WhatsApp Trigger').item.json.messages[0].type.toJsonString() }},\n  \"ai\": {{ $json.content }},\n  \"wa_id\": {{ $('WhatsApp Trigger').item.json.contacts[0].wa_id }},\n  \"phone\": {{ $('Code in JavaScript').item.json.phoneNumber }},\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        352,
+        512
+      ],
+      "id": "9e7f3e03-773c-4ff3-9293-4c2470a48701",
+      "name": "Extraer informacion"
+    },
+    {
+      "parameters": {
+        "model": "deepseek-v3.1:671b-cloud",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        688
+      ],
+      "id": "fac4a7be-db65-4fff-bf80-c2582a72f291",
+      "name": "Ollama Chat",
+      "credentials": {
+        "ollamaApi": {
+          "id": "9J2CB4DTM5VdqDzh",
+          "name": "Ollama - dev-sma"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "786212977900335",
+        "recipientPhoneNumber": "={{ $('Unir datos').item.json.phone }}",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        1536,
+        496
+      ],
+      "id": "e76f17ac-e65f-475d-abd8-eb0aa2a5a825",
+      "name": "Responder",
+      "webhookId": "dd5e5b28-ff88-4c39-8b91-dda028cf6bc7",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "RJTFi2eMTgWkw8E9",
+          "name": "WhatsApp - Business Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Procesamiento de la respuesta al usuario",
+        "height": 416,
+        "width": 608,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        864,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "dd7d2f13-ef13-4a3c-b9e6-8700ade79aa6",
+      "name": "Sticky Note2"
+    }
+  ],
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "¿Qué tipo de mensaje es?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Qué tipo de mensaje es?": {
+      "main": [
+        [
+          {
+            "node": "Extraer mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Procesar imagen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unir datos": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Responder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer mensaje": {
+      "main": [
+        [
+          {
+            "node": "Unir datos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Procesar imagen": {
+      "main": [
+        [
+          {
+            "node": "Descargar imagen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar imagen": {
+      "main": [
+        [
+          {
+            "node": "Analyze Ollama",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Ollama": {
+      "main": [
+        [
+          {
+            "node": "Extraer informacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze OpenAI": {
+      "main": [
+        []
+      ]
+    },
+    "Extraer informacion": {
+      "main": [
+        [
+          {
+            "node": "Unir datos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07a167b33a2c4f677e104ea6fd5ded887f679f10744632444dda91b3bc7b67f3"
+  }
+}
