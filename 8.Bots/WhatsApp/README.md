@@ -1,25 +1,33 @@
 # 🤖 Bot de WhatsApp con IA
 
 ## 📌 ¿Qué resuelve?
-Bot de WhatsApp que responde mensajes de texto e imágenes usando IA. Ayuda con preguntas de conocimiento general y análisis de imágenes mediante modelos LLM locales (Ollama) y en la nube.
+Bot de WhatsApp que responde mensajes de texto, audios, imágenes y documentos usando IA. Ayuda con preguntas de conocimiento general, transcribe audios, analiza imágenes y puede responder con texto o voz mediante modelos LLM locales (Ollama) y en la nube.
 
 ---
 
 ## 🔁 Flujo breve
 
 ### 💬 **Text Message**
-Trigger → Normalizar número de teléfono → Switch tipo mensaje → Extraer información → AI Agent → Enviar respuesta
+Trigger → Normalizar número de teléfono → Switch tipo mensaje → Extraer información → AI Agent → Enviar respuesta por texto
 
 ### 🖼️ **Image Message**
 Trigger → Normalizar número → Switch → Descargar media → Obtener URL → Descargar imagen → Analizar con Vision AI → Extraer información → AI Agent → Enviar respuesta
+
+### 📄 **Document Image Message**
+Trigger → Normalizar número → Switch → Descargar documento → Analizar imagen del documento → AI Agent → Enviar respuesta
+
+### 🎤 **Audio Message**
+Trigger → Normalizar número → Switch → Descargar audio → Transcribir con OpenAI Whisper → AI Agent → Detectar tipo → Enviar respuesta (texto o audio)
 
 ---
 
 ## ⚡ Partes "sheites"
 
 ### 🧠 **IA multimodal**
-- **Texto**: Usa modelo `deepseek-v3.1:671b-cloud` (Ollama) para respuestas conversacionales
+- **Texto**: Usa modelo `llama3.2:3b` (Ollama) para respuestas conversacionales
+- **Audio**: Transcripción con OpenAI Whisper y síntesis de voz con OpenAI TTS
 - **Imágenes**: Usa modelo `llama3.2-vision:11b` (Ollama) para análisis visual
+- **Documentos**: Procesa imágenes enviadas como documentos
 - **Alternativas**: Soporta Google Gemini y GPT-4O (deshabilitados por defecto)
 - **Memoria**: Mantiene contexto de los últimos 10 mensajes por usuario (`wa_id` como session key)
 
@@ -27,6 +35,8 @@ Trigger → Normalizar número → Switch → Descargar media → Obtener URL �
 Detecta automáticamente el tipo de mensaje:
 - Mensaje de texto → Respuesta conversacional
 - Imagen → Análisis con Vision AI
+- Documento con imagen → Análisis del documento
+- Audio → Transcripción y respuesta (texto o voz)
 
 ### 📱 **Normalización de números argentinos**
 Convierte números de WhatsApp al formato correcto de Argentina:
@@ -49,7 +59,10 @@ Integración completa con WhatsApp Business:
 - Envío de respuestas con Phone Number ID
 
 ### 🌍 **Respuestas en español**
-Configurado para responder siempre en castellano (Español - Latino) independientemente del idioma de entrada
+Configurado para responder siempre en castellano (Español - Latino) independientemente del idioma de entrada. Máximo 5 líneas por respuesta para mantener concisión.
+
+### 🎤 **Respuesta adaptativa**
+Si el mensaje recibido es un audio, el bot responde con **audio sintetizado** usando OpenAI TTS. Para otros tipos de mensaje, responde con texto.
 
 ---
 
@@ -59,16 +72,20 @@ Configurado para responder siempre en castellano (Español - Latino) independien
 Usuario → WhatsApp Business API
    ↓
 [Bot Trigger] → Normalizar teléfono → Switch (tipo de mensaje)
-   ├── Texto → Ollama Chat → Respuesta
-   └── Imagen → Download Media → Llama Vision → Ollama Chat → Respuesta
+   ├── Texto → Ollama Chat → Respuesta texto
+   ├── Audio → Whisper (transcripción) → Ollama Chat → TTS → Respuesta audio
+   ├── Imagen → Download Media → Llama Vision → Ollama Chat → Respuesta texto
+   └── Documento → Download Media → Llama Vision → Ollama Chat → Respuesta texto
 ```
 
 ---
 
 ## 🔑 Características clave
 - ✅ Memoria contextual por usuario (wa_id como session key)
-- ✅ Análisis de imágenes con caption personalizado
+- ✅ Análisis de imágenes y documentos con caption personalizado
+- ✅ Transcripción de audios con OpenAI Whisper
+- ✅ Respuesta por voz usando OpenAI TTS (formato opus)
 - ✅ Normalización automática de números telefónicos argentinos
-- ✅ Respuestas siempre en español
+- ✅ Respuestas siempre en español (máximo 5 líneas)
 - ✅ Múltiples modelos de IA disponibles (Ollama, Gemini, GPT-4O)
 - ✅ Integración nativa con WhatsApp Business API
