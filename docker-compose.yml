@@ -1,0 +1,71 @@
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: n8n_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: n8n_user
+      POSTGRES_PASSWORD: n8n_pass_123
+      POSTGRES_DB: n8n_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - n8n_net
+      - dokploy-network   # 👈 para que pgAdmin y n8n lo vean desde Traefik
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n_app
+    restart: always
+    environment:
+      - N8N_HOST=n8n.yourdomain.com
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - N8N_EDITOR_BASE_URL=https://n8n.yourdomain.com
+      - WEBHOOK_URL=https://n8n.yourdomain.com
+      - GENERIC_TIMEZONE=America/Argentina/Buenos_Aires
+
+      # 🔑 clave fija (NO cambiar más nunca)
+      - N8N_ENCRYPTION_KEY=superClaveFijaSegura123456781
+
+      # ⚙️ ajustes de seguridad y compatibilidad
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_TRUSTED_PROXIES=0.0.0.0/0
+      - N8N_RUNNERS_ENABLED=true
+
+      # 🔗 conexión a postgres
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n_db
+      - DB_POSTGRESDB_USER=n8n_user
+      - DB_POSTGRESDB_PASSWORD=n8n_pass_123
+    depends_on:
+      - postgres
+    networks:
+      - n8n_net
+      - dokploy-network   # 👈 clave para que Traefik enrute HTTPS
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: n8n_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: example@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: QwErTy159753
+    depends_on:
+      - postgres
+    networks:
+      - n8n_net
+      - dokploy-network   # 👈 necesario para Traefik
+
+volumes:
+  postgres_data:
+
+networks:
+  n8n_net:
+    driver: bridge
+
+  dokploy-network:
+    external: true
